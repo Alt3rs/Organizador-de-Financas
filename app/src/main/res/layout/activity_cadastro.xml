@@ -50,7 +50,8 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:background="@drawable/rounded_edittext"
-        android:inputType="textEmailAddress">
+        android:inputType="textEmailAddress"
+        android:drawableStart="@drawable/baseline_email_24">
     </EditText>
 </com.google.android.material.textfield.TextInputLayout>
 
@@ -86,7 +87,8 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:background="@drawable/rounded_edittext">
+        android:background="@drawable/rounded_edittext"
+        android:drawableStart="@drawable/baseline_name_24">
     </EditText>
 </com.google.android.material.textfield.TextInputLayout>
 
@@ -126,7 +128,8 @@
          android:textSize="20sp"
          android:textStyle="bold"
          android:background="@drawable/rounded_edittext"
-         android:inputType="textPassword">
+         android:inputType="textPassword"
+         android:drawableStart="@drawable/baseline_lock_24">
      </EditText>
  </com.google.android.material.textfield.TextInputLayout>
 
@@ -166,7 +169,8 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:background="@drawable/rounded_edittext"
-        android:inputType="textPassword">
+        android:inputType="textPassword"
+        android:drawableStart="@drawable/baseline_confirmpassword_24">
     </EditText>
 </com.google.android.material.textfield.TextInputLayout>
 
