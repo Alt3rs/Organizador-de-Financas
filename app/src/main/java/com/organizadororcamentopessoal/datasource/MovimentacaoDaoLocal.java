@@ -16,37 +16,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MovimentacaoDaoLocal extends SQLiteOpenHelper implements MovimentacaoDao {
-    public static final int DATABASE_VERSION = DatabaseContract.DATABASE_VERSION;
-    public static final String DBName = DatabaseContract.DATABASE_NAME;
-    private static MovimentacaoDao instance;
+public class MovimentacaoDaoLocal  implements MovimentacaoDao {
+    private SQLiteOpenHelper dbHelper;
 
-    public MovimentacaoDaoLocal(Context context, String dbName, int dbVersion) { // Para testes
-        super(context.getApplicationContext(), dbName, null, dbVersion);
-    }
-    public MovimentacaoDaoLocal(Context context) {
-        super(context.getApplicationContext(), DBName, null, DATABASE_VERSION);
-    }
-
-    public static MovimentacaoDao getInstance(Context context) {
-        if(instance == null) {
-            instance = new MovimentacaoDaoLocal(context);
-        }
-        return instance;
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase MyDB) {
-        MyDB.execSQL(MovimentacaoTable.CREATE_TABLE);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase MyDB, int oldVersion, int newVersion) {
-        MyDB.execSQL("DROP TABLE IF EXISTS " +  MovimentacaoTable.TABLE_NAME);
+    public MovimentacaoDaoLocal(SQLiteOpenHelper dbHelper) {
+        this.dbHelper = dbHelper;
     }
 
     public boolean criarMovimentacao(long idUsuario, double valor, String descricao, Date dataMovimentacao) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(MovimentacaoTable.ID_USUARIO , idUsuario);
         contentValues.put(MovimentacaoTable.VALOR, valor);
@@ -64,7 +42,7 @@ public class MovimentacaoDaoLocal extends SQLiteOpenHelper implements Movimentac
                 MovimentacaoTable.DATA_MOVIMENTACAO +
                 ") SELECT u."+ UsuarioTable.ID_USUARIO +", ?, ?, ? FROM "+ UsuarioTable.TABLE_NAME +
                 " u WHERE u."+ UsuarioTable.USERNAME +" = ?";
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.rawQuery(command, new String[] {Double.toString(valor), descricao,
                 Long.toString(dateToEpochSeconds(dataMovimentacao)), userName});
         return  cursor.getCount() >= 1;
@@ -83,7 +61,7 @@ public class MovimentacaoDaoLocal extends SQLiteOpenHelper implements Movimentac
                 "u." + UsuarioTable.USERNAME + " = ?" +
                 " AND " + MovimentacaoTable.DATA_MOVIMENTACAO + " BETWEEN ? AND ?";
 
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(command, new String[]{ userName,
                 Long.toString(dateToEpochSeconds(inicio)), Long.toString(dateToEpochSeconds(fim))});
 
@@ -108,7 +86,7 @@ public class MovimentacaoDaoLocal extends SQLiteOpenHelper implements Movimentac
         values.put(MovimentacaoTable.DESCRICAO, descricao);
         values.put(MovimentacaoTable.DATA_MOVIMENTACAO, dateToEpochSeconds(dataMovimentacao));
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         long updatedRows = db.update(MovimentacaoTable.TABLE_NAME,
                 values,
                 MovimentacaoTable.ID_MOVIMENTACAO + " = ?",
@@ -117,7 +95,7 @@ public class MovimentacaoDaoLocal extends SQLiteOpenHelper implements Movimentac
     }
 
     public boolean excluirMovimentacao(long idMovimentacao) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         long deletedRows = db.delete(
                 MovimentacaoTable.TABLE_NAME,
                 MovimentacaoTable.ID_MOVIMENTACAO + " = ?",
