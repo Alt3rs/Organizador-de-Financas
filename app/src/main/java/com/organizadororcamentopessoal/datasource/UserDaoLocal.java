@@ -1,12 +1,12 @@
 package com.organizadororcamentopessoal.datasource;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.organizadororcamentopessoal.datasource.DatabaseContract.UsuarioTable;
+import com.organizadororcamentopessoal.entities.Usuario;
 
 public class UserDaoLocal implements UserDao {
     private SQLiteOpenHelper dbHelper;
@@ -37,6 +37,54 @@ public class UserDaoLocal implements UserDao {
         SQLiteDatabase MyDB = dbHelper.getReadableDatabase();
         try (Cursor cursor = MyDB.rawQuery(command, new String[]{email, senha})) {
             return cursor.getCount() > 0;
+        }
+    }
+
+    @Override
+    public Usuario getUser(long idUsuario) {
+        final String command = "SELECT " +
+                UsuarioTable.ID_USUARIO + "," +
+                UsuarioTable.USERNAME + "," +
+                UsuarioTable.EMAIL +
+                " FROM " + UsuarioTable.TABLE_NAME +
+                " WHERE " + UsuarioTable.ID_USUARIO + " = ?";
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        try(Cursor cursor = db.rawQuery(command, new String[]{Long.toString(idUsuario)})) {
+            Usuario result = null;
+            if(cursor.moveToNext()) {
+                result = new Usuario(
+                        cursor.getLong(cursor.getColumnIndexOrThrow(UsuarioTable.ID_USUARIO)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(UsuarioTable.USERNAME)),
+                        cursor.getString((cursor.getColumnIndexOrThrow(UsuarioTable.EMAIL))),
+                        null
+                );
+            }
+            return result;
+        }
+    }
+
+    @Override
+    public Usuario getUser(String userName) {
+        final String command = "SELECT " +
+                UsuarioTable.ID_USUARIO + "," +
+                UsuarioTable.USERNAME + "," +
+                UsuarioTable.EMAIL +
+                " FROM " + UsuarioTable.TABLE_NAME +
+                " WHERE " + UsuarioTable.USERNAME + " = ?";
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        try(Cursor cursor = db.rawQuery(command, new String[]{userName})) {
+            Usuario result = null;
+            if(cursor.moveToNext()) {
+                result = new Usuario(
+                        cursor.getLong(cursor.getColumnIndexOrThrow(UsuarioTable.ID_USUARIO)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(UsuarioTable.USERNAME)),
+                        cursor.getString((cursor.getColumnIndexOrThrow(UsuarioTable.EMAIL))),
+                        null
+                );
+            }
+            return result;
         }
     }
 }
