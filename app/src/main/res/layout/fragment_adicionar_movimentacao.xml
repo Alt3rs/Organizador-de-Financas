@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AdicionarMovimentacaoFragment">
+    tools:context=".adicionar_movimentacao.AdicionarMovimentacaoFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="378dp"
         android:layout_height="342dp"
         android:layout_marginStart="16dp"
@@ -15,7 +16,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/limiteDiarioValueTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/limiteDiarioValueTextView"
+        tools:listitem="@layout/movimentacao_row_adapter"/>
 
     <TextView
         android:id="@+id/totalDiarioLabelTextView"
@@ -52,7 +54,7 @@
         android:layout_width="86dp"
         android:layout_height="86dp"
         android:layout_marginBottom="144dp"
-        android:backgroundTint="#4CAF50"
+        android:backgroundTint="@color/verde_recebimento"
         android:fontFamily="sans-serif-smallcaps"
         android:gravity="center|center_horizontal"
         android:includeFontPadding="false"
@@ -113,7 +115,7 @@
         android:layout_width="86dp"
         android:layout_height="86dp"
         android:layout_marginBottom="144dp"
-        android:backgroundTint="#B83B62"
+        android:backgroundTint="@color/vermelho_gasto"
         android:fontFamily="sans-serif-smallcaps"
         android:gravity="center|center_horizontal"
         android:includeFontPadding="false"

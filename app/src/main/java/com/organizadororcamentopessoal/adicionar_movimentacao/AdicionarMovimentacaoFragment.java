@@ -1,10 +1,12 @@
-package com.organizadororcamentopessoal;
+package com.organizadororcamentopessoal.adicionar_movimentacao;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +14,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.organizadororcamentopessoal.R;
 import com.organizadororcamentopessoal.datasource.FinancasDbHelper;
 import com.organizadororcamentopessoal.datasource.MovimentacaoDao;
 import com.organizadororcamentopessoal.datasource.UserDao;
+import com.organizadororcamentopessoal.entities.Movimentacao;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.TimeZone;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +39,8 @@ public class AdicionarMovimentacaoFragment extends Fragment {
     private MovimentacaoDao movimentacaoDao;
     private Button adicionarRecebimentoButton, adicionarGastoButton;
     private TextView limiteDiarioValueTextView, totalGastoDiarioValueTextView, totalRecebimentoValueTextView;
+    private RecyclerView recyclerView;
+    private MovimentacaoAdapter movimentacaoAdapter;
 
     public AdicionarMovimentacaoFragment() {    }
 
@@ -68,10 +76,21 @@ public class AdicionarMovimentacaoFragment extends Fragment {
         limiteDiarioValueTextView = view.findViewById(R.id.limiteDiarioValueTextView);
         totalRecebimentoValueTextView = view.findViewById(R.id.totalRecebimentoValueTextView);
         totalGastoDiarioValueTextView = view.findViewById(R.id.totalGastoDiarioValueTextView);
+        recyclerView =  view.findViewById(R.id.recyclerView);
 
-        Calendar calendar = GregorianCalendar.getInstance();
-        //Date now = calendar.get(Calendar.DATE);
-        //Date tomorrow = calendar.add(Calendar.HOUR, 24);
-        //movimentacaoDao.obterMovimentacaoNoIntervalo(userName, now.getTime(), now.(Calendar.HOUR, 24) );
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        movimentacaoAdapter = new MovimentacaoAdapter(obterMovimentacaoHoje());
+        recyclerView.setAdapter(movimentacaoAdapter);
     }
+
+    private List<Movimentacao> obterMovimentacaoHoje() {
+        Calendar calendar =  GregorianCalendar.getInstance();
+        long now = System.currentTimeMillis();
+        long offset =  TimeZone.getDefault().getRawOffset();
+        long today = now - (now % (3600 * 1000 * 24)) - offset;
+        long tomorrow = today + 3600 * 1000 * 24 - 1;
+        return movimentacaoDao.obterMovimentacaoNoIntervalo(userName, new Date(today), new Date(tomorrow));
+    }
+
+
 }
