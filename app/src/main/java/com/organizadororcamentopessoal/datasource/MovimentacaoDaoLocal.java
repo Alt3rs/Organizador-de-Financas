@@ -3,6 +3,7 @@ package com.organizadororcamentopessoal.datasource;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -30,31 +31,42 @@ public class MovimentacaoDaoLocal  implements MovimentacaoDao {
         contentValues.put(MovimentacaoTable.VALOR, valor);
         contentValues.put(MovimentacaoTable.DESCRICAO, descricao);
         contentValues.put(MovimentacaoTable.DATA_MOVIMENTACAO, dateToEpochSeconds(dataMovimentacao));
-        long result = db.insert(MovimentacaoTable.TABLE_NAME, null, contentValues);
-        return  result != -1;
+        try {
+            long result = db.insert(MovimentacaoTable.TABLE_NAME, null, contentValues);
+            return result != -1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean criarMovimentacao(String userName, double valor, String descricao, Date dataMovimentacao) {
-        final String command = "INSERT INTO " + MovimentacaoTable.TABLE_NAME + " (" +
+        final String command = "INSERT INTO " + MovimentacaoTable.TABLE_NAME + "m (" +
                 MovimentacaoTable.ID_USUARIO + "," +
                 MovimentacaoTable.VALOR + "," +
                 MovimentacaoTable.DESCRICAO + "," +
                 MovimentacaoTable.DATA_MOVIMENTACAO +
                 ") SELECT u."+ UsuarioTable.ID_USUARIO +", ?, ?, ? FROM "+ UsuarioTable.TABLE_NAME +
                 " u WHERE u."+ UsuarioTable.USERNAME +" = ?";
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor cursor = db.rawQuery(command, new String[] {Double.toString(valor), descricao,
-                Long.toString(dateToEpochSeconds(dataMovimentacao)), userName});
-        return  cursor.getCount() >= 1;
+        try {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            Cursor cursor = db.rawQuery(command, new String[] {Double.toString(valor), descricao,
+                    Long.toString(dateToEpochSeconds(dataMovimentacao)), userName});
+            return  cursor.getCount() >= 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @NotNull
     public List<Movimentacao> obterMovimentacaoNoIntervalo(String userName, Date inicio, Date fim) {
-        final String command = "SELECT " + MovimentacaoTable.ID_MOVIMENTACAO + "," +
-                MovimentacaoTable.ID_USUARIO + "," +
-                MovimentacaoTable.VALOR + "," +
-                MovimentacaoTable.DESCRICAO + "," +
-                MovimentacaoTable.DATA_MOVIMENTACAO +
+        final String command = "SELECT " +
+                "m." + MovimentacaoTable.ID_MOVIMENTACAO + "," +
+                "m." + MovimentacaoTable.ID_USUARIO + "," +
+                "m." + MovimentacaoTable.VALOR + "," +
+                "m." + MovimentacaoTable.DESCRICAO + "," +
+                "m." + MovimentacaoTable.DATA_MOVIMENTACAO +
                 " FROM " + MovimentacaoTable.TABLE_NAME + " m " +
                 " JOIN " + UsuarioTable.TABLE_NAME + " u ON u." + UsuarioTable.ID_USUARIO +
                 " = m." + MovimentacaoTable.ID_USUARIO + " WHERE " +
@@ -87,21 +99,31 @@ public class MovimentacaoDaoLocal  implements MovimentacaoDao {
         values.put(MovimentacaoTable.DATA_MOVIMENTACAO, dateToEpochSeconds(dataMovimentacao));
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        long updatedRows = db.update(MovimentacaoTable.TABLE_NAME,
-                values,
-                MovimentacaoTable.ID_MOVIMENTACAO + " = ?",
-                new String[]{ Long.toString(idMovimentacao)});
-        return updatedRows != 0;
+        try {
+            long updatedRows = db.update(MovimentacaoTable.TABLE_NAME,
+                    values,
+                    MovimentacaoTable.ID_MOVIMENTACAO + " = ?",
+                    new String[]{ Long.toString(idMovimentacao)});
+            return updatedRows != 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean excluirMovimentacao(long idMovimentacao) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try {
         long deletedRows = db.delete(
                 MovimentacaoTable.TABLE_NAME,
                 MovimentacaoTable.ID_MOVIMENTACAO + " = ?",
                 new String[]{Long.toString(idMovimentacao)}
         );
         return deletedRows != 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     protected static long dateToEpochSeconds(Date data) {

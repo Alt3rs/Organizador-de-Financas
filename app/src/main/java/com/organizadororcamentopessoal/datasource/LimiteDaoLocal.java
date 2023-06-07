@@ -3,6 +3,7 @@ package com.organizadororcamentopessoal.datasource;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -26,8 +27,13 @@ public class LimiteDaoLocal implements LimiteDao {
         ContentValues contentValues = new ContentValues();
         contentValues.put(LimiteTable.ID_USUARIO , idUsuario);
         contentValues.put(LimiteTable.VALOR, valor);
-        long result = db.insert(LimiteTable.TABLE_NAME, null, contentValues);
-        return  result != -1;
+        try {
+            long result = db.insert(LimiteTable.TABLE_NAME, null, contentValues);
+            return  result != -1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public Limite obterLimite(long idLimite) {
@@ -77,11 +83,16 @@ public class LimiteDaoLocal implements LimiteDao {
     @Override
     public boolean excluirLimite(long idLimite) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        long deletedRows = db.delete(
-                LimiteTable.TABLE_NAME,
-                LimiteTable.ID_LIMITE + " = ?",
-                new String[] {Long.toString(idLimite)}
-        );
-        return deletedRows != 0;
+        try {
+            long deletedRows = db.delete(
+                    LimiteTable.TABLE_NAME,
+                    LimiteTable.ID_LIMITE + " = ?",
+                    new String[] {Long.toString(idLimite)}
+            );
+            return deletedRows != 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

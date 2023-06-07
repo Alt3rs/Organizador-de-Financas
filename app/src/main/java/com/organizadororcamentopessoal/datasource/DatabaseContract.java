@@ -58,7 +58,7 @@ public class DatabaseContract {
                 "CREATE TABLE " + TABLE_NAME + " ( " +
                         ID_LIMITE +" INTEGER PRIMARY KEY, " +
                         ID_USUARIO + " INTEGER NOT NULL UNIQUE REFERENCES " +
-                        UsuarioTable.TABLE_NAME + "(" + UsuarioTable.ID_USUARIO + ") " +
+                        UsuarioTable.TABLE_NAME + "(" + UsuarioTable.ID_USUARIO + "), " +
                         VALOR + " REAL NOT NULL " +
                         ");";
     }
