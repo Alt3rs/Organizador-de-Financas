@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home">
+    tools:context=".login.HomeActivity">
 
     <TextView
         android:layout_width="280dp"
@@ -33,82 +33,79 @@
         android:textSize="30sp" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/txtData"
+        android:layout_width="293dp"
         android:layout_height="wrap_content"
-        android:text=" "
-        android:fontFamily="sans-serif-black"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:textColor="@color/black"
         android:layout_marginStart="20dp"
         android:layout_marginTop="190dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="150dp"
-        android:id="@+id/txtData"/>
+        android:fontFamily="sans-serif-black"
+        android:gravity="center"
+        android:text=" "
+        android:textColor="@color/black"
+        android:textSize="20sp" />
 
 
     <Button
+        android:id="@+id/btnResumo"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Resumo"
-        android:id="@+id/btnResumo"
         android:layout_marginStart="50dp"
         android:layout_marginTop="250dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="150dp"
+        android:backgroundTint="#53AE02"
+        android:drawableLeft="@drawable/vector_resumo"
         android:fontFamily="sans-serif"
         android:gravity="center"
+        android:text="Resumo"
         android:textColor="@color/black"
-        android:textSize="20sp"
-        android:backgroundTint="#53AE02"
-        android:drawableLeft="@drawable/vector_resumo"/>
+        android:textSize="20sp" />
 
 
     <Button
+        android:id="@+id/btnCalendario"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Calendário"
-        android:id="@+id/btnCalendario"
         android:layout_marginStart="50dp"
         android:layout_marginTop="350dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="150dp"
+        android:backgroundTint="#EACB02"
+        android:drawableLeft="@drawable/vector_calendario"
         android:fontFamily="sans-serif"
         android:gravity="center"
+        android:text="Calendário"
         android:textColor="@color/black"
-        android:textSize="20sp"
-        android:backgroundTint="#EACB02"
-        android:drawableLeft="@drawable/vector_calendario">
-    </Button>
+        android:textSize="20sp"></Button>
 
     <Button
+        android:id="@+id/btnMovimentacao"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Movimentação"
-        android:id="@+id/btnMovimentacao"
         android:layout_marginStart="50dp"
         android:layout_marginTop="450dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="150dp"
+        android:backgroundTint="#187FD1"
+        android:drawableLeft="@drawable/vector_movimentacao"
         android:fontFamily="sans-serif"
         android:gravity="center"
+        android:text="Movimentação"
         android:textColor="@color/black"
-        android:textSize="20sp"
-        android:backgroundTint="#187FD1"
-        android:drawableLeft="@drawable/vector_movimentacao">
-    </Button>
+        android:textSize="20sp"></Button>
 
     <Button
+        android:id="@+id/btnConfig"
         android:layout_width="50dp"
         android:layout_height="70dp"
-        android:id="@+id/btnConfig"
         android:layout_marginStart="340dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="150dp"
-        android:gravity="right"
         android:backgroundTint="@color/white"
-        android:drawableTop="@drawable/config_settings_24">
-    </Button>
+        android:drawableTop="@drawable/config_settings_24"
+        android:gravity="right"></Button>
 
 </RelativeLayout>

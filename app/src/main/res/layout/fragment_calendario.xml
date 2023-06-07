@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".calendario.CalendarioFragment"
+    tools:layout_editor_absoluteX="-6dp"
+    tools:layout_editor_absoluteY="-5dp">
+
+    <Button
+        android:id="@+id/buttonNov"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nov"
+        app:backgroundTint="#787474"
+        app:layout_constraintEnd_toStartOf="@+id/buttonMar"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toEndOf="@+id/buttonJan"
+        tools:layout_editor_absoluteY="560dp" />
+
+    <Button
+        android:id="@+id/buttonOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Out"
+        app:backgroundTint="#787474"
+        app:layout_constraintEnd_toStartOf="@+id/buttonFev"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="560dp" />
+
+    <Button
+        android:id="@+id/buttonDez"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dez"
+        app:backgroundTint="#787474"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonNov"
+        tools:layout_editor_absoluteY="560dp" />
+
+    <Button
+        android:id="@+id/buttonAgo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ago"
+        app:backgroundTint="#787474"
+        app:layout_constraintEnd_toStartOf="@+id/buttonMar"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toEndOf="@+id/buttonJan"
+        tools:layout_editor_absoluteY="471dp" />
+
+    <Button
+        android:id="@+id/buttonJul"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jul"
+        app:backgroundTint="#787474"
+        app:layout_constraintEnd_toStartOf="@+id/buttonFev"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="471dp" />
+
+    <Button
+        android:id="@+id/buttonSet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set"
+        app:backgroundTint="#787474"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toEndOf="@+id/buttonFev"
+        tools:layout_editor_absoluteY="471dp" />
+
+    <Button
+        android:id="@+id/buttonMai"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mai"
+        app:backgroundTint="#787474"
+        app:layout_constraintEnd_toStartOf="@+id/buttonMar"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toEndOf="@+id/buttonJan"
+        tools:layout_editor_absoluteY="377dp" />
+
+    <Button
+        android:id="@+id/buttonJun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jun"
+        app:backgroundTint="#787474"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toEndOf="@+id/buttonFev"
+        tools:layout_editor_absoluteY="377dp" />
+
+    <Button
+        android:id="@+id/buttonAbr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Abr"
+        app:backgroundTint="#787474"
+        app:layout_constraintEnd_toStartOf="@+id/buttonFev"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="377dp" />
+
+    <Button
+        android:id="@+id/buttonMar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mar"
+        app:backgroundTint="#787474"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonFev"
+        tools:layout_editor_absoluteY="286dp" />
+
+    <Button
+        android:id="@+id/buttonFev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fev"
+        app:backgroundTint="#787474"
+        app:layout_constraintEnd_toStartOf="@+id/buttonMar"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonJan"
+        tools:layout_editor_absoluteY="286dp" />
+
+    <Button
+        android:id="@+id/buttonJan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jan"
+        app:backgroundTint="#787474"
+        app:layout_constraintEnd_toStartOf="@+id/buttonFev"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="286dp" />
+
+    <TextView
+        android:id="@+id/yearTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="177dp"
+        tools:layout_editor_absoluteY="209dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

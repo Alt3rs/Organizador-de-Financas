@@ -1,4 +1,4 @@
-package com.example.organizadororcamentopessoal;
+package com.organizadororcamentopessoal;
 
 import org.junit.Test;
 

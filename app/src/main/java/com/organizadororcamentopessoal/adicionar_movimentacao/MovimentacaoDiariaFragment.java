@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.organizadororcamentopessoal.R;
+import com.organizadororcamentopessoal.datasource.DatabaseContract;
 import com.organizadororcamentopessoal.datasource.FinancasDbHelper;
 import com.organizadororcamentopessoal.datasource.MovimentacaoDao;
 import com.organizadororcamentopessoal.datasource.UserDao;
@@ -28,13 +29,12 @@ import java.util.TimeZone;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AdicionarMovimentacaoFragment#newInstance} factory method to
+ * Use the {@link MovimentacaoDiariaFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AdicionarMovimentacaoFragment extends Fragment {
-    public  static final String ARG_PARAM1 = "idUsuario";
-
-    private String userName;
+public class MovimentacaoDiariaFragment extends Fragment {
+    private static String USERNAME = DatabaseContract.UsuarioTable.USERNAME;
+    private String username;
     private UserDao userDao;
     private MovimentacaoDao movimentacaoDao;
     private Button adicionarRecebimentoButton, adicionarGastoButton;
@@ -42,12 +42,12 @@ public class AdicionarMovimentacaoFragment extends Fragment {
     private RecyclerView recyclerView;
     private MovimentacaoAdapter movimentacaoAdapter;
 
-    public AdicionarMovimentacaoFragment() {    }
+    public MovimentacaoDiariaFragment() {    }
 
-    public static AdicionarMovimentacaoFragment newInstance(String userName) {
-        AdicionarMovimentacaoFragment fragment = new AdicionarMovimentacaoFragment();
+    public static MovimentacaoDiariaFragment newInstance(String username) {
+        MovimentacaoDiariaFragment fragment = new MovimentacaoDiariaFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, userName);
+        args.putString(USERNAME, username);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,13 +56,13 @@ public class AdicionarMovimentacaoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            userName = getArguments().getString(ARG_PARAM1);
+            username = getArguments().getString(USERNAME);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_adicionar_movimentacao, container, false);
+        return inflater.inflate(R.layout.fragment_movimentacao_diaria, container, false);
     }
 
     @Override
@@ -70,6 +70,7 @@ public class AdicionarMovimentacaoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         userDao = FinancasDbHelper.getUserDao(getContext().getApplicationContext());
         movimentacaoDao = FinancasDbHelper.getMovimentacaoDao(getContext().getApplicationContext());
+        username = MovimentacaoDiariaFragmentArgs.fromBundle(getArguments()).getUsername();
 
         adicionarRecebimentoButton = view.findViewById(R.id.adicionarRecebimentoButton);
         adicionarGastoButton = view.findViewById(R.id.adicionarGastoButton);
@@ -89,7 +90,7 @@ public class AdicionarMovimentacaoFragment extends Fragment {
         long offset =  TimeZone.getDefault().getRawOffset();
         long today = now - (now % (3600 * 1000 * 24)) - offset;
         long tomorrow = today + 3600 * 1000 * 24 - 1;
-        return movimentacaoDao.obterMovimentacaoNoIntervalo(userName, new Date(today), new Date(tomorrow));
+        return movimentacaoDao.obterMovimentacaoNoIntervalo(username, new Date(today), new Date(tomorrow));
     }
 
 

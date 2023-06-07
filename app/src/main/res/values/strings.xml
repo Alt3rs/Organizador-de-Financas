@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">OrganizadorOrcamentoPessoal</string>
+    <string name="app_name">SeOrganize</string>
+    <string name="home_title">Home</string>
+    <string name="movimentacao_diaria_fragment_title">Movimentação Diária</string>
+    <string name="cadastro_activity_title">Cadastro</string>
+    <string name="hub_activity_title">Hub</string>
+    <string name="menu_configuracoes_title">Configurações</string>
 </resources>
