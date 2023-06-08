@@ -1,8 +1,17 @@
 <resources>
-    <string name="app_name">SeOrganize</string>
+    <string name="app_name">$e Organize</string>
     <string name="home_title">Home</string>
     <string name="movimentacao_diaria_fragment_title">Movimentação Diária</string>
     <string name="cadastro_activity_title">Cadastro</string>
     <string name="hub_activity_title">Hub</string>
     <string name="menu_configuracoes_title">Configurações</string>
+
+    <string name="gasto">Gasto</string>
+    <string name="recebimento">Recebimento</string>
+    <string name="salvar">Salvar</string>
+    <string name="cancelar">Cancelar</string>
+
+    <string name="dialog_descricao_hint">Descrição(opcional)</string>
+
+    <string name="dinheiro_placeholder">R$ 0,00</string>
 </resources>

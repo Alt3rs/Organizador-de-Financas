@@ -55,7 +55,6 @@ public class CadastroActivity extends AppCompatActivity {
                 Intent it = new Intent(CadastroActivity.this, HubActivity.class);
                 it.putExtra(DatabaseContract.UsuarioTable.USERNAME, nome);
                 startActivity(it);
-                getParent().finish();
                 finish();
             } else {
                 Toast.makeText(CadastroActivity.this, "Falha no registro", Toast.LENGTH_SHORT).show();

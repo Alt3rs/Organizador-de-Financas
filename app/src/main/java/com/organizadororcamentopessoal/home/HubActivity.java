@@ -37,18 +37,18 @@ public class HubActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         //DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-
+        //NavigationView navView = findViewById(R.id.nav_view);
         navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
 
         navController = navHostFragment.getNavController();
         navController.setGraph(R.navigation.nav_graph, args);
-
         AppBarConfiguration appBarConfiguration =
                 new AppBarConfiguration.Builder(navController.getGraph())
                         //.setOpenableLayout(drawerLayout)
                         .build();
+
         setSupportActionBar(toolbar);
-        //NavigationView navView = findViewById(R.id.nav_view);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
         //NavigationUI.setupWithNavController(navView, navController);
     }

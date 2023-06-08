@@ -37,7 +37,7 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
             return valorTextView;
         }
         public TextView getDescricaoTextView() {
-            return dataTextView;
+            return descricaoTextView;
         }
     }
 
@@ -62,15 +62,15 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         Movimentacao atual = localDataSet.get(position);
-        viewHolder.getDataTextView().setText(hhmmFormat.format(atual.getDataMovimentacao()));
+        viewHolder.getDataTextView().setText(fullDateFormat.format(atual.getDataMovimentacao()));
         viewHolder.getDescricaoTextView().setText(atual.getDescricao());
         TextView valorTextView = viewHolder.getValorTextView();
         if(atual.getValor() >= 0) {
             valorTextView.setTextColor(valorTextView.getResources().getColor(R.color.verde_recebimento, valorTextView.getContext().getTheme()));
-            valorTextView.setText(String.format("+R$ %.2f", atual.getValor()));
+            valorTextView.setText(String.format("+R$ %.2f", Math.abs(atual.getValor())));
         } else {
             valorTextView.setTextColor(valorTextView.getResources().getColor(R.color.vermelho_gasto, valorTextView.getContext().getTheme()));
-            valorTextView.setText(String.format("-R$ %.2f", atual.getValor()));
+            valorTextView.setText(String.format("-R$ %.2f", Math.abs(atual.getValor())));
         }
     }
 

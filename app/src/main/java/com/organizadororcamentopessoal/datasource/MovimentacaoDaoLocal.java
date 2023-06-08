@@ -40,18 +40,18 @@ public class MovimentacaoDaoLocal  implements MovimentacaoDao {
         }
     }
 
-    public boolean criarMovimentacao(String userName, double valor, String descricao, Date dataMovimentacao) {
-        final String command = "INSERT INTO " + MovimentacaoTable.TABLE_NAME + "m (" +
+    public boolean criarMovimentacao(String username, double valor, String descricao, Date dataMovimentacao) {
+        final String command = "INSERT INTO " + MovimentacaoTable.TABLE_NAME + " (" +
                 MovimentacaoTable.ID_USUARIO + "," +
                 MovimentacaoTable.VALOR + "," +
                 MovimentacaoTable.DESCRICAO + "," +
                 MovimentacaoTable.DATA_MOVIMENTACAO +
                 ") SELECT u."+ UsuarioTable.ID_USUARIO +", ?, ?, ? FROM "+ UsuarioTable.TABLE_NAME +
                 " u WHERE u."+ UsuarioTable.USERNAME +" = ?";
-        try {
+
             SQLiteDatabase db = dbHelper.getWritableDatabase();
-            Cursor cursor = db.rawQuery(command, new String[] {Double.toString(valor), descricao,
-                    Long.toString(dateToEpochSeconds(dataMovimentacao)), userName});
+        try (Cursor cursor = db.rawQuery(command, new String[] {Double.toString(valor), descricao,
+                    Long.toString(dateToEpochSeconds(dataMovimentacao)), username})) {
             return  cursor.getCount() >= 1;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,7 +60,7 @@ public class MovimentacaoDaoLocal  implements MovimentacaoDao {
     }
 
     @NotNull
-    public List<Movimentacao> obterMovimentacaoNoIntervalo(String userName, Date inicio, Date fim) {
+    public List<Movimentacao> obterMovimentacaoNoIntervalo(String username, Date inicio, Date fim) {
         final String command = "SELECT " +
                 "m." + MovimentacaoTable.ID_MOVIMENTACAO + "," +
                 "m." + MovimentacaoTable.ID_USUARIO + "," +
@@ -74,21 +74,21 @@ public class MovimentacaoDaoLocal  implements MovimentacaoDao {
                 " AND " + MovimentacaoTable.DATA_MOVIMENTACAO + " BETWEEN ? AND ?";
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery(command, new String[]{ userName,
-                Long.toString(dateToEpochSeconds(inicio)), Long.toString(dateToEpochSeconds(fim))});
-
-        List<Movimentacao> result = new ArrayList<>(cursor.getCount());
-        while ( cursor.moveToNext() ) {
-            Movimentacao movimentacao = new Movimentacao(
-                    cursor.getLong(cursor.getColumnIndexOrThrow(MovimentacaoTable.ID_MOVIMENTACAO)),
-                    cursor.getLong(cursor.getColumnIndexOrThrow(MovimentacaoTable.ID_USUARIO)),
-                    cursor.getDouble(cursor.getColumnIndexOrThrow(MovimentacaoTable.VALOR)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(MovimentacaoTable.DESCRICAO)),
-                    epochSecondsToDate(cursor.getLong(cursor.getColumnIndexOrThrow(MovimentacaoTable.DATA_MOVIMENTACAO)))
-            );
-            result.add(movimentacao);
+        try(Cursor cursor = db.rawQuery(command, new String[]{username,
+                Long.toString(dateToEpochSeconds(inicio)), Long.toString(dateToEpochSeconds(fim))})) {
+            List<Movimentacao> result = new ArrayList<>(cursor.getCount());
+            while ( cursor.moveToNext() ) {
+                Movimentacao movimentacao = new Movimentacao(
+                        cursor.getLong(cursor.getColumnIndexOrThrow(MovimentacaoTable.ID_MOVIMENTACAO)),
+                        cursor.getLong(cursor.getColumnIndexOrThrow(MovimentacaoTable.ID_USUARIO)),
+                        cursor.getDouble(cursor.getColumnIndexOrThrow(MovimentacaoTable.VALOR)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(MovimentacaoTable.DESCRICAO)),
+                        epochSecondsToDate(cursor.getLong(cursor.getColumnIndexOrThrow(MovimentacaoTable.DATA_MOVIMENTACAO)))
+                );
+                result.add(movimentacao);
+            }
+            return result;
         }
-        return result;
     }
 
 
@@ -123,6 +123,67 @@ public class MovimentacaoDaoLocal  implements MovimentacaoDao {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    @Override
+    public double totalBalancoNoIntervalo(String username, Date inicio, Date fim) {
+        final String resultAlias = "sum";
+        final String command = "SELECT SUM(" + MovimentacaoTable.VALOR + ") AS " + resultAlias +
+                " FROM " + MovimentacaoTable.TABLE_NAME + " m " +
+                " JOIN " + UsuarioTable.TABLE_NAME + " u ON u." + UsuarioTable.ID_USUARIO +
+                " = m." + MovimentacaoTable.ID_USUARIO + " WHERE " +
+                "u." + UsuarioTable.USERNAME + " = ?" +
+                " AND " + MovimentacaoTable.DATA_MOVIMENTACAO + " BETWEEN ? AND ?";
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        try(Cursor cursor = db.rawQuery(command, new String[]{username,
+                Long.toString(dateToEpochSeconds(inicio)), Long.toString(dateToEpochSeconds(fim))})) {
+            if(cursor.moveToFirst()) {
+                return cursor.getDouble(cursor.getColumnIndexOrThrow(resultAlias));
+            }
+            return 0;
+        }
+    }
+
+    public double totalGastoNoIntervalo(String username, Date inicio, Date fim) {
+        final String resultAlias = "sum";
+        final String command = "SELECT SUM(" + MovimentacaoTable.VALOR + ") as "+ resultAlias +
+                " FROM " + MovimentacaoTable.TABLE_NAME + " m " +
+                " JOIN " + UsuarioTable.TABLE_NAME + " u ON u." + UsuarioTable.ID_USUARIO +
+                " = m." + MovimentacaoTable.ID_USUARIO + " WHERE " +
+                "u." + UsuarioTable.USERNAME + " = ?" +
+                " AND " + MovimentacaoTable.VALOR + " < 0 " +
+                " AND " + MovimentacaoTable.DATA_MOVIMENTACAO + " BETWEEN ? AND ?";
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        try(Cursor cursor = db.rawQuery(command, new String[]{username,
+                Long.toString(dateToEpochSeconds(inicio)), Long.toString(dateToEpochSeconds(fim))})){
+            if(cursor.moveToFirst()) {
+                return cursor.getDouble(cursor.getColumnIndexOrThrow(resultAlias));
+            }
+            return 0;
+        }
+    }
+
+    @Override
+    public double totalRecebimentoNoIntervalo(String username, Date inicio, Date fim) {
+        final String resultAlias = "sum";
+        final String command = "SELECT SUM(" + MovimentacaoTable.VALOR + ") as "+ resultAlias +
+                " FROM " + MovimentacaoTable.TABLE_NAME + " m " +
+                " JOIN " + UsuarioTable.TABLE_NAME + " u ON u." + UsuarioTable.ID_USUARIO +
+                " = m." + MovimentacaoTable.ID_USUARIO + " WHERE " +
+                "u." + UsuarioTable.USERNAME + " = ?" +
+                " AND " + MovimentacaoTable.VALOR + " > 0 " +
+                " AND " + MovimentacaoTable.DATA_MOVIMENTACAO + " BETWEEN ? AND ?";
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        try(Cursor cursor = db.rawQuery(command, new String[]{username,
+                Long.toString(dateToEpochSeconds(inicio)), Long.toString(dateToEpochSeconds(fim))})) {
+            if(cursor.moveToFirst()) {
+                return cursor.getDouble(cursor.getColumnIndexOrThrow(resultAlias));
+            }
+            return 0;
         }
     }
 

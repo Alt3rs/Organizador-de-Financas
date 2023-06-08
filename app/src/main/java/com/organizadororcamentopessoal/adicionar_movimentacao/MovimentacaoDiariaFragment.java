@@ -20,12 +20,11 @@ import com.organizadororcamentopessoal.datasource.FinancasDbHelper;
 import com.organizadororcamentopessoal.datasource.MovimentacaoDao;
 import com.organizadororcamentopessoal.datasource.UserDao;
 import com.organizadororcamentopessoal.entities.Movimentacao;
+import com.organizadororcamentopessoal.tempo.Tempo;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.TimeZone;
+import java.util.Locale;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,15 +81,26 @@ public class MovimentacaoDiariaFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         movimentacaoAdapter = new MovimentacaoAdapter(obterMovimentacaoHoje());
         recyclerView.setAdapter(movimentacaoAdapter);
+
+        adicionarGastoButton.setOnClickListener((button) -> {
+            AdicionarMovimentacaoDialog dialog = new AdicionarMovimentacaoDialog(getActivity(), username);
+            dialog.setDefaultSelectedType(AdicionarMovimentacaoDialog.GASTO);
+            dialog.show();
+        });
+        adicionarRecebimentoButton.setOnClickListener((button) -> {
+            AdicionarMovimentacaoDialog dialog = new AdicionarMovimentacaoDialog(getActivity(), username);
+            dialog.setDefaultSelectedType(AdicionarMovimentacaoDialog.RECEBIMENTO);
+            dialog.show();
+        });
+
+        double gastoTotal = movimentacaoDao.totalGastoNoIntervalo(username, Tempo.getTodayStart(), Tempo.getTodayEnd());
+        double recebimentoTotal = movimentacaoDao.totalRecebimentoNoIntervalo(username, Tempo.getTodayStart(), Tempo.getTodayEnd());
+        totalGastoDiarioValueTextView.setText(String.format(Locale.getDefault(), "R$ %.2f", gastoTotal));
+        totalRecebimentoValueTextView.setText(String.format(Locale.getDefault(), "R$ %.2f", recebimentoTotal));
     }
 
     private List<Movimentacao> obterMovimentacaoHoje() {
-        Calendar calendar =  GregorianCalendar.getInstance();
-        long now = System.currentTimeMillis();
-        long offset =  TimeZone.getDefault().getRawOffset();
-        long today = now - (now % (3600 * 1000 * 24)) - offset;
-        long tomorrow = today + 3600 * 1000 * 24 - 1;
-        return movimentacaoDao.obterMovimentacaoNoIntervalo(username, new Date(today), new Date(tomorrow));
+        return movimentacaoDao.obterMovimentacaoNoIntervalo(username, Tempo.getTodayStart(), Tempo.getTodayEnd());
     }
 
 

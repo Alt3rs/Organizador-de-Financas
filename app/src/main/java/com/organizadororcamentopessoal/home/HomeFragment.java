@@ -18,11 +18,11 @@ import android.widget.TextView;
 import com.organizadororcamentopessoal.R;
 import com.organizadororcamentopessoal.datasource.DatabaseContract;
 import com.organizadororcamentopessoal.home.HomeFragmentDirections;
+
 public class HomeFragment extends Fragment {
     private String username;
     private HomeViewModel viewModel;
     private Button resumoButton, calendarioButton, movimentacaoButton;
-    private TextView boasVindasTextView;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -48,10 +48,8 @@ public class HomeFragment extends Fragment {
         resumoButton = view.findViewById(R.id.resumoButton);
         calendarioButton = view.findViewById(R.id.calendarioButton);
         movimentacaoButton = view.findViewById(R.id.movimentacaoButton);
-        boasVindasTextView = view.findViewById(R.id.boasVindasTextView);
-        
-        boasVindasTextView.setText("Bem vindo de volta, " + username);
 
+        getActivity().setTitle(username);
         movimentacaoButton.setOnClickListener((View button) -> {
             Navigation.findNavController(button)
                     .navigate(HomeFragmentDirections

@@ -8,106 +8,49 @@
     android:scrollbars="vertical|horizontal"
     tools:scrollbars="vertical|horizontal">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/boasVindasTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="52dp"
-                android:fontFamily="sans-serif"
-                android:gravity="left"
-                android:text="Bem vindo de volta, "
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/movimentacaoButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:backgroundTint="#187FD1"
+            android:drawableLeft="@drawable/vector_movimentacao"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Movimentação"
+            android:textColor="@color/black"
+            android:textSize="20sp"></Button>
 
-            <Button
-                android:id="@+id/movimentacaoButton"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:backgroundTint="#187FD1"
-                android:drawableLeft="@drawable/vector_movimentacao"
-                android:fontFamily="sans-serif"
-                android:gravity="center"
-                android:text="Movimentação"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.53"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/calendarioButton"
-                app:layout_constraintVertical_bias="0.0"></Button>
+        <Button
+            android:id="@+id/resumoButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:backgroundTint="#53AE02"
+            android:drawableLeft="@drawable/vector_resumo"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Resumo"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="261dp"
-                android:layout_height="81dp"
-                android:layout_marginTop="48dp"
-                android:fontFamily="sans-serif-black"
-                android:gravity="center"
-                android:text="Organizador de Finanças"
-                android:textColor="@color/black"
-                android:textSize="30sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/boasVindasTextView" />
-
-            <Button
-                android:id="@+id/resumoButton"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="72dp"
-                android:backgroundTint="#53AE02"
-                android:drawableLeft="@drawable/vector_resumo"
-                android:fontFamily="sans-serif"
-                android:gravity="center"
-                android:text="Resumo"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toTopOf="@+id/calendarioButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.531"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtData2" />
-
-            <TextView
-                android:id="@+id/txtData2"
-                android:layout_width="306dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="60dp"
-                android:fontFamily="sans-serif-black"
-                android:gravity="center"
-                android:text=" "
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-            <Button
-                android:id="@+id/calendarioButton"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:backgroundTint="#EACB02"
-                android:drawableLeft="@drawable/vector_calendario"
-                android:fontFamily="sans-serif"
-                android:gravity="center"
-                android:text="Calendário"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.525"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/resumoButton"></Button>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+        <Button
+            android:id="@+id/calendarioButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:backgroundTint="#EACB02"
+            android:drawableLeft="@drawable/vector_calendario"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Calendário"
+            android:textColor="@color/black"
+            android:textSize="20sp"></Button>
+    </LinearLayout>
 </androidx.core.widget.NestedScrollView>

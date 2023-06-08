@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:divider="@drawable/bold_table_vertical_divider"
     android:padding="5dp"
     android:showDividers="end">
@@ -48,7 +48,6 @@
             android:minLines="1"
 
             android:scrollHorizontally="false"
-            android:text="Pãoa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa    aaaaaaaaa"
             android:textSize="16sp"
             android:textStyle="bold" />
     </TableRow>
