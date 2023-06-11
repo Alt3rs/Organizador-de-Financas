@@ -6,6 +6,7 @@ package com.organizadororcamentopessoal.datasource;
  * {@value UsuarioTable#CREATE_TABLE}
  * {@value MovimentacaoTable#CREATE_TABLE}
  * {@value LimiteTable#CREATE_TABLE}
+ * {@value LimiteTable#CRIAR_LIMITE_PADRAO_TRIGGER}
  * </pre>
  * */
 public class DatabaseContract {
@@ -20,12 +21,14 @@ public class DatabaseContract {
         public static final String USERNAME = "username";
         public static final String EMAIL = "email";
         public static final String SENHA = "senha";
+        public static final String LIMITE_HABILITADO = "limiteHabilitado";
         public static final String CREATE_TABLE =
                 "CREATE TABLE " + TABLE_NAME + " ( " +
                         ID_USUARIO +" INTEGER PRIMARY KEY, " +
                         USERNAME + " TEXT UNIQUE NOT NULL, " +
                         EMAIL + " TEXT NOT NULL, " +
-                        SENHA + " TEXT NOT NULL " +
+                        SENHA + " TEXT NOT NULL, " +
+                        LIMITE_HABILITADO + " INTEGER " +
                         ");";
     }
 
@@ -61,5 +64,11 @@ public class DatabaseContract {
                         UsuarioTable.TABLE_NAME + "(" + UsuarioTable.ID_USUARIO + "), " +
                         VALOR + " REAL NOT NULL " +
                         ");";
+        public static final String CRIAR_LIMITE_PADRAO_TRIGGER =
+                "CREATE TRIGGER criarLimite AFTER INSERT ON " + UsuarioTable.TABLE_NAME +
+                        " Begin INSERT INTO " + LimiteTable.TABLE_NAME + " (" +
+                        LimiteTable.ID_USUARIO + "," +
+                        LimiteTable.VALOR + ") VALUES (" +
+                        "NEW." + UsuarioTable.ID_USUARIO + ", 0.0); END;";
     }
 }

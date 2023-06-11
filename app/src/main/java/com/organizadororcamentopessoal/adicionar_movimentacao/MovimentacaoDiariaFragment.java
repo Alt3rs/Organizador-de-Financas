@@ -12,11 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.organizadororcamentopessoal.R;
 import com.organizadororcamentopessoal.datasource.DatabaseContract;
 import com.organizadororcamentopessoal.datasource.FinancasDbHelper;
+import com.organizadororcamentopessoal.datasource.LimiteDao;
 import com.organizadororcamentopessoal.datasource.MovimentacaoDao;
 import com.organizadororcamentopessoal.datasource.UserDao;
 import com.organizadororcamentopessoal.entities.Movimentacao;
@@ -44,9 +46,11 @@ public class MovimentacaoDiariaFragment extends Fragment implements AdicionarMov
     private LocalDate currentDate;
     private UserDao userDao;
     private MovimentacaoDao movimentacaoDao;
+    private LimiteDao limiteDao;
     private Button adicionarRecebimentoButton, adicionarGastoButton;
     private TextView limiteDiarioValueTextView, totalGastoDiarioValueTextView,
             totalRecebimentoValueTextView, saldoValueTextView;
+    private TableRow limiteTableRow;
     private RecyclerView recyclerView;
     private MovimentacaoAdapter movimentacaoAdapter;
     private LinearLayoutManager layoutManager;
@@ -107,6 +111,7 @@ public class MovimentacaoDiariaFragment extends Fragment implements AdicionarMov
         super.onViewCreated(view, savedInstanceState);
         userDao = FinancasDbHelper.getUserDao(getContext().getApplicationContext());
         movimentacaoDao = FinancasDbHelper.getMovimentacaoDao(getContext().getApplicationContext());
+        limiteDao = FinancasDbHelper.getLimiteDao(getContext().getApplicationContext());
         username = MovimentacaoDiariaFragmentArgs.fromBundle(getArguments()).getUsername();
 
         adicionarRecebimentoButton = view.findViewById(R.id.adicionarRecebimentoButton);
@@ -115,6 +120,7 @@ public class MovimentacaoDiariaFragment extends Fragment implements AdicionarMov
         totalRecebimentoValueTextView = view.findViewById(R.id.totalRecebimentoValueTextView);
         totalGastoDiarioValueTextView = view.findViewById(R.id.totalGastoValueTextView);
         saldoValueTextView = view.findViewById(R.id.saldoValueTextView);
+        limiteTableRow = view.findViewById(R.id.limiteTableRow);
         recyclerView =  view.findViewById(R.id.recyclerView);
 
         layoutManager = new LinearLayoutManager(view.getContext());
@@ -142,10 +148,21 @@ public class MovimentacaoDiariaFragment extends Fragment implements AdicionarMov
     private void updateDisplay() {
         double gastoTotal = movimentacaoDao.totalGastoNoIntervalo(username, Tempo.getTodayStart(), Tempo.getTodayEnd());
         double recebimentoTotal = movimentacaoDao.totalRecebimentoNoIntervalo(username, Tempo.getTodayStart(), Tempo.getTodayEnd());
-        double saldo = recebimentoTotal + gastoTotal;
         totalGastoDiarioValueTextView.setText(String.format(Locale.getDefault(), "%.2f", gastoTotal));
         totalRecebimentoValueTextView.setText(String.format(Locale.getDefault(), "%.2f", recebimentoTotal));
-        saldoValueTextView.setText(String.format(Locale.getDefault(), "%.2f", saldo));
+
+        if(limiteDao.limiteEstaHabilitado(username)) {
+            double limite = limiteDao.listarTodosLimitesDoUsuario(username).get(0).getValor();
+            double saldo = recebimentoTotal + gastoTotal + limite;
+            limiteDiarioValueTextView.setText(String.format(Locale.getDefault(), "%.2f", limite));
+            saldoValueTextView.setText(String.format(Locale.getDefault(), "%.2f", saldo));
+            limiteTableRow.setVisibility(View.VISIBLE);
+        } else {
+            double saldo = recebimentoTotal + gastoTotal;
+            saldoValueTextView.setText(String.format(Locale.getDefault(), "%.2f", saldo));
+            limiteTableRow.setVisibility(View.GONE);
+        }
+
         //movimentacaoAdapter.getDataSet().clear();
         //movimentacaoAdapter.getDataSet().addAll(obterMovimentacaoHoje());
         movimentacaoAdapter.setDataSet(obterMovimentacaoHoje());

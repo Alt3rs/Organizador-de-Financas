@@ -3,6 +3,7 @@ package com.organizadororcamentopessoal.home;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -11,12 +12,17 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.material.navigation.NavigationView;
+import com.organizadororcamentopessoal.NavGraphDirections;
 import com.organizadororcamentopessoal.R;
+import com.organizadororcamentopessoal.adicionar_movimentacao.MovimentacaoDiariaFragmentDirections;
 import com.organizadororcamentopessoal.datasource.DatabaseContract;
+
+import com.organizadororcamentopessoal.home.HomeFragmentDirections;
 
 public class HubActivity extends AppCompatActivity {
     private String username;
@@ -55,27 +61,18 @@ public class HubActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.activity_main_appbar_actions, menu);
-        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.hub_toolbar_actions, menu);
+        //return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        if(item.getItemId() == R.id.action_share) {
-//            //Compartilha o historico em formato JSON
-//            try(CorridaRepository repository = new CorridaRepository(getApplicationContext())) {
-//                String export = repository.listar(false).toString();
-//                Intent sendIntent = new Intent();
-//                sendIntent.setAction(Intent.ACTION_SEND);
-//                sendIntent.putExtra(Intent.EXTRA_TEXT, export);
-//                sendIntent.setType("text/plain"); //Especifica o formato de arquivo
-//                Intent shareIntent = Intent.createChooser(sendIntent, null); //O usuário escolhe o aplicativo consumidor
-//                startActivity(shareIntent);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            return true;
-//        }
+        if(item.getItemId() == R.id.actionLimiteSettings) {
+            navHostFragment.getNavController().navigate(
+                    HomeFragmentDirections.actionGlobalLimitesConfigFragment(username));
+            return true;
+        }
         return NavigationUI.onNavDestinationSelected(item, navController) ||
                 super.onOptionsItemSelected(item);
     }

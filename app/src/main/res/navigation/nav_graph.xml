@@ -12,7 +12,11 @@
 
         <action
             android:id="@+id/action_homeFragment_to_movimentacaoDiaria"
-            app:destination="@id/movimentacaoDiaria" />
+            app:destination="@id/movimentacaoDiaria"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
 
@@ -25,4 +29,19 @@
             android:name="username"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/limitesConfigFragment"
+        android:name="com.organizadororcamentopessoal.adicionar_movimentacao.LimitesConfigFragment"
+        android:label="@string/limite_config_fragment_title"
+        tools:layout="@layout/fragment_limites_config" >
+        <argument android:name="username"
+            app:argType="string" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_limitesConfigFragment"
+        app:destination="@id/limitesConfigFragment"
+        app:enterAnim="@android:anim/slide_in_left"
+        app:exitAnim="@android:anim/slide_out_right"
+        app:popEnterAnim="@android:anim/slide_in_left"
+        app:popExitAnim="@android:anim/slide_out_right" />
 </navigation>

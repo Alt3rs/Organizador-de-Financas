@@ -49,48 +49,7 @@
                 android:divider="@drawable/bold_table_horizontal_divider"
                 android:showDividers="middle|end">
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
 
-                    <TextView
-                        android:id="@+id/OrcamentoLabelTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Orçamento:"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/orcamentoValueTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="R$ 0,00"
-                        android:textAlignment="viewEnd"
-                        android:textSize="16sp" />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/totalGastoLabelTextView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Total gasto:"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/totalGastoValueTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="R$ 0,00"
-                        android:textAlignment="viewEnd"
-                        android:textSize="16sp" />
-                </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -119,6 +78,27 @@
                     android:layout_height="match_parent">
 
                     <TextView
+                        android:id="@+id/totalGastoLabelTextView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total gasto:"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/totalGastoValueTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="R$ 0,00"
+                        android:textAlignment="viewEnd"
+                        android:textSize="16sp" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
                         android:id="@+id/saldoLabelTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -133,6 +113,29 @@
                         android:text="R$ 0,00"
                         android:textAlignment="viewEnd"
                         android:textSize="16sp" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/limiteTableRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/OrcamentoLabelTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Limite de Gasto:"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/orcamentoValueTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="R$ 0,00"
+                        android:textAlignment="viewEnd"
+                        android:textSize="16sp" />
+
                 </TableRow>
 
             </TableLayout>
