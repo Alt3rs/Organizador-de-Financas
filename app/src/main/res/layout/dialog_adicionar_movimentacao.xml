@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.flexbox.FlexboxLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    app:flexWrap="wrap">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,60 +30,164 @@
             android:layout_margin="4dp" />
     </LinearLayout>
 
-    <LinearLayout
+    <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        app:alignContent="stretch"
+        app:flexWrap="wrap">
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-    <LinearLayout
+            <TextView
+                android:id="@+id/dataLabelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="16dp"
+                android:text="Data:"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/dataEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="16dp"
+                android:hint="00/00/0000"
+                android:inputType="datetime"
+                android:maxEms="10"
+                android:maxLength="10"
+                android:minHeight="48dp"
+                android:minEms="5"
+                android:textSize="16sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/datePickerButton"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="4dp"
+                android:backgroundTint="@color/white"
+                android:fontFamily="sans-serif-smallcaps"
+                android:includeFontPadding="false"
+                android:shadowColor="#000000"
+                android:shadowDy="1"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="0dp"
+                app:icon="@drawable/vector_calendario"
+                app:iconGravity="textEnd" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/horaLabelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="16dp"
+                android:text="Hora:"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/timeEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="16dp"
+                android:ems="5"
+                android:hint="00:00"
+                android:inputType="datetime"
+                android:maxEms="5"
+                android:maxLength="5"
+                android:minHeight="48dp"
+                android:minEms="3"
+                android:textSize="16sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/timePickerButton"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/white"
+                android:fontFamily="sans-serif-smallcaps"
+                android:includeFontPadding="false"
+                android:shadowColor="#000000"
+                android:shadowDy="1"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="0dp"
+                app:icon="@drawable/baseline_schedule_24"
+                app:iconGravity="textEnd" />
+        </LinearLayout>
+
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+
+    <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        app:flexDirection="column"
+        app:flexWrap="wrap">
 
-        <TextView
-            android:id="@+id/dataLabelTextView"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="16dp"
-            android:text="Data:"
-            android:textSize="16sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="16dp"
+                android:text="Valor:"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/valorEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="sans-serif"
+                android:hint="0,00"
+                android:inputType="number|numberDecimal"
+                android:maxEms="9"
+                android:minHeight="48dp"
+                android:minEms="6"
+                android:textAlignment="textEnd" />
+
+        </LinearLayout>
 
         <EditText
-            android:id="@+id/dataEditText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="16dp"
-            android:ems="10"
-            android:inputType="datetime"
-            android:minHeight="48dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="16dp"
-            android:text="Valor:"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/valorEditText"
+            android:id="@+id/descricaoValueEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
@@ -89,31 +195,21 @@
             android:layout_marginRight="4dp"
             android:layout_marginBottom="16dp"
             android:fontFamily="sans-serif"
-            android:hint="@string/dinheiro_placeholder"
-            android:inputType="numberDecimal"
-            android:minHeight="48dp" />
+            android:hint="@string/dialog_descricao_hint"
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:minLines="1"
+            android:scrollIndicators="top"
+            android:scrollHorizontally="true"
+            app:layout_flexGrow="1"
+            app:layout_minWidth="10dp" />
 
-    </LinearLayout>
 
-    <EditText
-        android:id="@+id/descricaoValueEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="16dp"
-        android:fontFamily="sans-serif"
-        android:hint="@string/dialog_descricao_hint"
-        android:inputType="text"
-        android:minHeight="48dp"
-        android:minLines="1"
-        android:scrollIndicators="top"
-        android:scrollHorizontally="true" />
+    </com.google.android.flexbox.FlexboxLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="right"
         android:orientation="horizontal">
 
@@ -135,4 +231,4 @@
             android:text="@string/salvar" />
     </LinearLayout>
 
-</LinearLayout>
+</com.google.android.flexbox.FlexboxLayout>

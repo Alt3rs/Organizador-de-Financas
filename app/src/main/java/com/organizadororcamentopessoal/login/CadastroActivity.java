@@ -14,6 +14,7 @@ import com.organizadororcamentopessoal.datasource.DatabaseContract;
 import com.organizadororcamentopessoal.datasource.FinancasDbHelper;
 import com.organizadororcamentopessoal.datasource.UserDao;
 import com.organizadororcamentopessoal.home.HubActivity;
+import com.organizadororcamentopessoal.text.Text;
 
 public class CadastroActivity extends AppCompatActivity {
     private EditText edtLoginCadastro, edtNome, edtSenhaCadastro, edtConfirma;
@@ -38,7 +39,7 @@ public class CadastroActivity extends AppCompatActivity {
             String senha = edtSenhaCadastro.getText().toString();
             String conf =  edtConfirma.getText().toString();
 
-            if(isBlank(email)|| isBlank(nome) || isBlank(senha) || isBlank(conf)){
+            if(Text.isBlank(email)|| Text.isBlank(nome) || Text.isBlank(senha) || Text.isBlank(conf)){
                 Toast.makeText(CadastroActivity.this, "Por favor preencha todos os campos", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -62,7 +63,4 @@ public class CadastroActivity extends AppCompatActivity {
         });
     }
 
-    private static boolean isBlank(String s) {
-        return s.trim().isEmpty();
-    }
 }

@@ -7,9 +7,20 @@ import java.util.Date;
 import java.util.List;
 
 public interface MovimentacaoDao {
-    boolean criarMovimentacao(long idUsuario, double valor, String descricao, Date dataMovimentacao);
-    boolean criarMovimentacao(String username, double valor, String descricao, Date dataMovimentacao);
-    List<Movimentacao> obterMovimentacaoNoIntervalo(String username, Date inicio, Date fim);
+    public static final int NONE = 0, ASC = 1, DESC = 2;
+    long criarMovimentacao(long idUsuario, double valor, String descricao, Date dataMovimentacao);
+    long criarMovimentacao(String username, double valor, String descricao, Date dataMovimentacao);
+    Movimentacao obterMovimentacao(long idMovimentacao);
+
+    /**
+     *
+     * @param username
+     * @param inicio
+     * @param fim
+     * @param ordem NONE = 0, ASC = 1, DESC = 2
+     * @return
+     */
+    List<Movimentacao> obterMovimentacaoNoIntervalo(String username, Date inicio, Date fim, int ordem);
     boolean atualizarMovimentacao(long idMovimentacao, double valor, String descricao, Date dataMovimentacao);
     boolean excluirMovimentacao(long idMovimentacao);
 

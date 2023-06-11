@@ -15,9 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapter.ViewHolder> {
-    private static SimpleDateFormat hhmmFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-    private static SimpleDateFormat fullDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
-    private List<Movimentacao> localDataSet;
+    private List<Movimentacao> dataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView dataTextView, valorTextView, descricaoTextView;
@@ -43,7 +41,14 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
 
 
     public MovimentacaoAdapter(List<Movimentacao> dataSet) {
-        localDataSet = dataSet;
+        this.dataSet = dataSet;
+    }
+
+    public void setDataSet(List<Movimentacao> dataSet) {
+        this.dataSet = dataSet;
+    }
+    public List<Movimentacao> getDataSet() {
+        return dataSet;
     }
 
     // Create new views (invoked by the layout manager)
@@ -59,9 +64,11 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+        //SimpleDateFormat hhmmFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        SimpleDateFormat fullDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        Movimentacao atual = localDataSet.get(position);
+        Movimentacao atual = dataSet.get(position);
         viewHolder.getDataTextView().setText(fullDateFormat.format(atual.getDataMovimentacao()));
         viewHolder.getDescricaoTextView().setText(atual.getDescricao());
         TextView valorTextView = viewHolder.getValorTextView();
@@ -76,6 +83,6 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
 
     @Override
     public int getItemCount() {
-        return localDataSet.size();
+        return dataSet.size();
     }
 }

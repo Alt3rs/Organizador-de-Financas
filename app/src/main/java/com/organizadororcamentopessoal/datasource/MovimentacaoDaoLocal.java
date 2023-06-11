@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 
 import com.organizadororcamentopessoal.entities.Movimentacao;
 import com.organizadororcamentopessoal.datasource.DatabaseContract.MovimentacaoTable;
@@ -20,11 +21,12 @@ import java.util.List;
 public class MovimentacaoDaoLocal  implements MovimentacaoDao {
     private SQLiteOpenHelper dbHelper;
 
+
     public MovimentacaoDaoLocal(SQLiteOpenHelper dbHelper) {
         this.dbHelper = dbHelper;
     }
 
-    public boolean criarMovimentacao(long idUsuario, double valor, String descricao, Date dataMovimentacao) {
+    public long criarMovimentacao(long idUsuario, double valor, String descricao, Date dataMovimentacao) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(MovimentacaoTable.ID_USUARIO , idUsuario);
@@ -33,35 +35,65 @@ public class MovimentacaoDaoLocal  implements MovimentacaoDao {
         contentValues.put(MovimentacaoTable.DATA_MOVIMENTACAO, dateToEpochSeconds(dataMovimentacao));
         try {
             long result = db.insert(MovimentacaoTable.TABLE_NAME, null, contentValues);
-            return result != -1;
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return -1;
         }
     }
 
-    public boolean criarMovimentacao(String username, double valor, String descricao, Date dataMovimentacao) {
-        final String command = "INSERT INTO " + MovimentacaoTable.TABLE_NAME + " (" +
+    public long criarMovimentacao(String username, double valor, String descricao, Date dataMovimentacao) {
+        final String sql = "INSERT INTO " + MovimentacaoTable.TABLE_NAME + " (" +
                 MovimentacaoTable.ID_USUARIO + "," +
                 MovimentacaoTable.VALOR + "," +
                 MovimentacaoTable.DESCRICAO + "," +
                 MovimentacaoTable.DATA_MOVIMENTACAO +
                 ") SELECT u."+ UsuarioTable.ID_USUARIO +", ?, ?, ? FROM "+ UsuarioTable.TABLE_NAME +
-                " u WHERE u."+ UsuarioTable.USERNAME +" = ?";
-
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-        try (Cursor cursor = db.rawQuery(command, new String[] {Double.toString(valor), descricao,
-                    Long.toString(dateToEpochSeconds(dataMovimentacao)), username})) {
-            return  cursor.getCount() >= 1;
+                " u WHERE u."+ UsuarioTable.USERNAME +" = ? LIMIT 1";
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try {
+            SQLiteStatement statement = db.compileStatement(sql);
+            statement.bindDouble(1, valor); // indice comeca no 1
+            statement.bindString(2, descricao);
+            statement.bindLong(3, dateToEpochSeconds(dataMovimentacao));
+            statement.bindString(4, username);
+            return statement.executeInsert();
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return -1;
+        }
+    }
+
+    //Tecnicamente, deveria haver autenticação para esse método
+    public Movimentacao obterMovimentacao(long idMovimentacao) {
+        final String command = "SELECT " +
+                MovimentacaoTable.ID_MOVIMENTACAO + "," +
+                MovimentacaoTable.ID_USUARIO + "," +
+                MovimentacaoTable.VALOR + "," +
+                MovimentacaoTable.DESCRICAO + "," +
+                MovimentacaoTable.DATA_MOVIMENTACAO +
+                MovimentacaoTable.TABLE_NAME +
+                " WHERE " + MovimentacaoTable.ID_MOVIMENTACAO + " = ?";
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        try(Cursor cursor = db.rawQuery(command, new String[]{Long.toString(idMovimentacao)})) {
+            if(cursor.moveToFirst()) {
+                Movimentacao movimentacao = new Movimentacao(
+                        cursor.getLong(cursor.getColumnIndexOrThrow(MovimentacaoTable.ID_MOVIMENTACAO)),
+                        cursor.getLong(cursor.getColumnIndexOrThrow(MovimentacaoTable.ID_USUARIO)),
+                        cursor.getDouble(cursor.getColumnIndexOrThrow(MovimentacaoTable.VALOR)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(MovimentacaoTable.DESCRICAO)),
+                        epochSecondsToDate(cursor.getLong(cursor.getColumnIndexOrThrow(MovimentacaoTable.DATA_MOVIMENTACAO)))
+                );
+                return movimentacao;
+            }
+            return null;
         }
     }
 
     @NotNull
-    public List<Movimentacao> obterMovimentacaoNoIntervalo(String username, Date inicio, Date fim) {
-        final String command = "SELECT " +
+    public List<Movimentacao> obterMovimentacaoNoIntervalo(String username, Date inicio, Date fim, int ordem) {
+        String command = "SELECT " +
                 "m." + MovimentacaoTable.ID_MOVIMENTACAO + "," +
                 "m." + MovimentacaoTable.ID_USUARIO + "," +
                 "m." + MovimentacaoTable.VALOR + "," +
@@ -72,6 +104,11 @@ public class MovimentacaoDaoLocal  implements MovimentacaoDao {
                 " = m." + MovimentacaoTable.ID_USUARIO + " WHERE " +
                 "u." + UsuarioTable.USERNAME + " = ?" +
                 " AND " + MovimentacaoTable.DATA_MOVIMENTACAO + " BETWEEN ? AND ?";
+        if(ordem == ASC) {
+            command += " ORDER BY m." + MovimentacaoTable.DATA_MOVIMENTACAO + " ASC";
+        } else if (ordem == DESC) {
+            command += " ORDER BY m." + MovimentacaoTable.DATA_MOVIMENTACAO + " DESC";
+        }
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         try(Cursor cursor = db.rawQuery(command, new String[]{username,

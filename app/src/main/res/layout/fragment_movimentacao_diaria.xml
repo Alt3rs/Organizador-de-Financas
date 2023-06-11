@@ -15,72 +15,128 @@
         tools:context=".adicionar_movimentacao.MovimentacaoDiariaFragment">
 
         <TextView
-            android:id="@+id/limiteDiarioLabelTextView"
-            android:layout_width="wrap_content"
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
-            android:text="Limite de Gastos Diários"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/limiteDiarioValueTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="R$ 0,00"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/limiteDiarioLabelTextView" />
+            android:layout_margin="5dp"
+            android:text="Histórico de movimentações"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textSize="16dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="342dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="48dp"
-            android:layout_marginEnd="16dp"
+            android:layout_margin="5dp"
+            android:scrollbarSize="5dp"
+            android:scrollbarThumbVertical="@android:color/darker_gray"
+            android:scrollbars="vertical"
             tools:listitem="@layout/movimentacao_row_adapter" />
 
         <LinearLayout
             android:id="@+id/linearLayout3"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
             android:divider="@drawable/bold_table_horizontal_divider"
             android:dividerPadding="4dp"
-            android:orientation="horizontal"
-            android:showDividers="middle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerView">
+            android:orientation="vertical"
+            android:showDividers="middle">
 
-            <TextView
-                android:id="@+id/totalDiarioLabelTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="2dp"
-                android:text="Total" />
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@drawable/bold_table_horizontal_divider"
+                android:showDividers="middle|end">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/totalGastoDiarioValueTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="R$ 0,00" />
+                    <TextView
+                        android:id="@+id/OrcamentoLabelTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Orçamento:"
+                        android:textSize="16sp" />
 
-                <TextView
-                    android:id="@+id/totalRecebimentoValueTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="R$ 0,00" />
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/orcamentoValueTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="R$ 0,00"
+                        android:textAlignment="viewEnd"
+                        android:textSize="16sp" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/totalGastoLabelTextView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total gasto:"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/totalGastoValueTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="R$ 0,00"
+                        android:textAlignment="viewEnd"
+                        android:textSize="16sp" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/totalGastoLabelTextView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="2dp"
+                        android:text="Total recebido:"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/totalRecebimentoValueTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="R$ 0,00"
+                        android:textAlignment="viewEnd"
+                        android:textSize="16sp" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/saldoLabelTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Saldo:"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/saldoValueTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="R$ 0,00"
+                        android:textAlignment="viewEnd"
+                        android:textSize="16sp" />
+                </TableRow>
+
+            </TableLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -100,19 +156,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 tools:layout_editor_absoluteY="661dp">
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/adicionarRecebimentoButton"
-                    android:layout_width="86dp"
-                    android:layout_height="86dp"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:backgroundTint="@color/verde_recebimento"
                     android:fontFamily="sans-serif-smallcaps"
-                    android:gravity="center|center_horizontal"
+                    android:gravity="center"
                     android:includeFontPadding="false"
-                    android:text="+"
                     android:textAlignment="center"
                     android:textColor="#000000"
-                    android:textSize="60sp"
-                    android:textStyle="bold" />
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:icon="@drawable/baseline_add_24"
+                    app:iconGravity="textEnd" />
 
                 <TextView
                     android:id="@+id/adicionarRecebimentoLabelTextView"
@@ -138,17 +196,20 @@
 
                 <Button
                     android:id="@+id/adicionarGastoButton"
-                    android:layout_width="86dp"
-                    android:layout_height="86dp"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:backgroundTint="@color/vermelho_gasto"
                     android:fontFamily="sans-serif-smallcaps"
-                    android:gravity="center|center_horizontal"
+                    android:gravity="center"
                     android:includeFontPadding="false"
-                    android:text="-"
                     android:textAlignment="center"
                     android:textColor="#000000"
-                    android:textSize="60sp"
-                    android:textStyle="bold" />
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:icon="@drawable/baseline_remove_24"
+                    app:iconGravity="textEnd"
+                    app:iconPadding="0dp" />
 
                 <TextView
                     android:id="@+id/adicionarGastoLabelTextView"
@@ -160,6 +221,11 @@
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"/>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
