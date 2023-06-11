@@ -13,25 +13,20 @@
         android:theme="@style/Theme.OrganizadorOrcamentoPessoal"
         tools:targetApi="31">
         <activity
-            android:name=".Configuracao"
+            android:name=".login.CadastroActivity"
+            android:exported="false"
+            android:label="@string/cadastro_activity_title"
+            android:theme="@style/Theme.OrganizadorOrcamentoPessoal" />
+        <activity
+            android:name=".home.HubActivity"
+            android:exported="false"
+            android:label="@string/hub_activity_title"
+            android:theme="@style/Theme.OrganizadorOrcamentoPessoal.NoActionBar" />
+        <activity
+            android:name=".login.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".Movimentacao"
-            android:exported="false" />
-        <activity
-            android:name=".Calendario"
-            android:exported="false" />
-        <activity
-            android:name=".Resumo"
-            android:exported="false" />
-        <activity
-            android:name=".Home"
-            android:exported="false" />
-        <activity
-            android:name=".Login"
-            android:exported="false" />
-        <activity
-            android:name=".Cadastro"
+            android:name=".login.LoginActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

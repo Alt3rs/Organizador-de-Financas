@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="vertical|horizontal"
+    tools:scrollbars="vertical|horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/movimentacaoButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:backgroundTint="#187FD1"
+            android:drawableLeft="@drawable/vector_movimentacao"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Movimentação"
+            android:textColor="@color/black"
+            android:textSize="20sp"></Button>
+
+        <Button
+            android:id="@+id/resumoButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:backgroundTint="#53AE02"
+            android:drawableLeft="@drawable/vector_resumo"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Resumo"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/calendarioButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:backgroundTint="#EACB02"
+            android:drawableLeft="@drawable/vector_calendario"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Calendário"
+            android:textColor="@color/black"
+            android:textSize="20sp"></Button>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -2,4 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="verde_recebimento">#4CAF50</color>
+    <color name="vermelho_gasto">#B83B62</color>
+    <color name="roxo">#673AB7</color>
 </resources>

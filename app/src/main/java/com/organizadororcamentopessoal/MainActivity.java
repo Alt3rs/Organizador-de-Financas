@@ -1,4 +1,4 @@
-package com.example.organizadororcamentopessoal;
+package com.organizadororcamentopessoal;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.organizadororcamentopessoal.R;
+import com.organizadororcamentopessoal.home.HomeFragment;
+import com.organizadororcamentopessoal.login.CadastroActivity;
+import com.organizadororcamentopessoal.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnCadastrar, btnEntrar;
@@ -21,14 +26,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void entrar(View view){
-        Intent it = new Intent(this, Login.class);
+        Intent it = new Intent(this, LoginActivity.class);
         startActivity(it);
 
     }
 
     public void cadastrar(View view){
-        Intent it = new Intent(this, Cadastro.class);
+        Intent it = new Intent(this, CadastroActivity.class);
         startActivity(it);
-
     }
 }
