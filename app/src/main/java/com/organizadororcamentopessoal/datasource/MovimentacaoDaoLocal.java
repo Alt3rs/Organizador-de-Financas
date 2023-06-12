@@ -224,6 +224,86 @@ public class MovimentacaoDaoLocal  implements MovimentacaoDao {
         }
     }
 
+    public List<Movimentacao> listarMovimentacoesSomarMesmaData(String username, Date inicio, Date fim, int tipo, int unidade) {
+        final String statement = "SELECT SUM(m.valor), m.data AS data FROM Movimentacao m WHERE m.data BETWEEN ? and ? GROUP BY m.data";
+        return null;
+    }
+
+    public List<Movimentacao> obterMovimentacaoNoIntervaloAgrupado(String username, Date inicio, Date fim, int tipo, int grupo){
+//        final String command = "SELECT SUM("+MovimentacaoTable.VALOR+") AS total, " +
+//                " unixepoch(strftime(?, "+MovimentacaoTable.DATA_MOVIMENTACAO+", 'unixepoch', 'localtime')) AS epoch " +
+//                " FROM "+MovimentacaoTable.TABLE_NAME+" m"+
+//                " JOIN "+UsuarioTable.TABLE_NAME+" AS u ON u."+UsuarioTable.ID_USUARIO+" = m."+MovimentacaoTable.ID_USUARIO+
+//                " WHERE "+MovimentacaoTable.DATA_MOVIMENTACAO+" BETWEEN ? AND ? AND u."+UsuarioTable.USERNAME+" = ? %s"+
+//                " GROUP BY strftime(?, dataMovimentacao, 'unixepoch', 'localtime') " +
+//                " ORDER BY "+MovimentacaoTable.DATA_MOVIMENTACAO+" ASC";
+            final String command = "SELECT SUM("+MovimentacaoTable.VALOR+") AS total, " +
+                    " strftime('%%s', strftime(?, "+MovimentacaoTable.DATA_MOVIMENTACAO+", 'unixepoch', 'localtime'), 'localtime') AS epoch " +
+                    " FROM "+MovimentacaoTable.TABLE_NAME+" m"+
+                    " JOIN "+UsuarioTable.TABLE_NAME+" AS u ON u."+UsuarioTable.ID_USUARIO+" = m."+MovimentacaoTable.ID_USUARIO+
+                    " WHERE "+MovimentacaoTable.DATA_MOVIMENTACAO+" BETWEEN ? AND ? AND u."+UsuarioTable.USERNAME+" = ? %s"+
+                    " GROUP BY strftime(?, dataMovimentacao, 'unixepoch', 'localtime') " +
+                    " ORDER BY "+MovimentacaoTable.DATA_MOVIMENTACAO+" ASC";
+        String filterByType = "";
+        if(tipo == ALL) {
+        } else if (tipo == RECEBIMENTO) {
+            filterByType = " AND "+ MovimentacaoTable.VALOR+" >= 0";
+        } else if (tipo == GASTO) {
+            filterByType = " AND "+ MovimentacaoTable.VALOR+" <= 0";
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+        String[] groupByArgs = new String[2];
+        if(grupo == MovimentacaoDao.MINUTO) {
+            groupByArgs[0] = "%Y-%m-%d %H:%M:00";
+            groupByArgs[1] = "%Y-%m-%d %H:%M:00";
+        } else if(grupo == MovimentacaoDao.HORA){
+            groupByArgs[0] = "%Y-%m-%d %H:00:00";
+            groupByArgs[1] = "%Y-%m-%d %H:00:00";
+        } else if(grupo == MovimentacaoDao.DIA){
+            groupByArgs[0] = "%Y-%m-%d";
+            groupByArgs[1] = "%Y-%m-%d";
+        } else if(grupo == MovimentacaoDao.SEMANA){
+            groupByArgs[0] = "%Y-%m-%d";
+            groupByArgs[1] = "%Y-%w";
+        } else if(grupo == MovimentacaoDao.MES){
+            groupByArgs[0] = "%Y-%m-01";
+            groupByArgs[1] = "%Y-%m-01";
+        } else if(grupo == MovimentacaoDao.ANO){
+            groupByArgs[0] = "%Y-01-01";
+            groupByArgs[1] = "%Y-01-01";
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+        String[] bindArgs = new String[]{
+                groupByArgs[0],
+                Long.toString(dateToEpochSeconds(inicio)),
+                Long.toString(dateToEpochSeconds(fim)),
+                username,
+                groupByArgs[1]
+        };
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        try(Cursor cursor = db.rawQuery(String.format(command,filterByType), bindArgs)){
+            List<Movimentacao> resultado = new ArrayList<>(cursor.getCount());
+            while ( cursor.moveToNext() ) {
+                Movimentacao movimentacao = new Movimentacao(
+                        0,
+                        0,
+                        cursor.getDouble(cursor.getColumnIndexOrThrow("total")),
+                        "",
+                        epochSecondsToDate(cursor.getLong(cursor.getColumnIndexOrThrow("epoch")))
+                );
+                resultado.add(movimentacao);
+            }
+            return resultado;
+        } catch (SQLException e) {
+            return new ArrayList<>(0);
+        }
+    }
+
     protected static long dateToEpochSeconds(Date data) {
         return data.getTime() / 1000;
     }

@@ -50,7 +50,7 @@ public class LimitesConfigFragment extends Fragment {
 
         Bundle args = getArguments();
         if (args != null) {
-            username = args.getString(DatabaseContract.UsuarioTable.USERNAME);
+            username = LimitesConfigFragmentArgs.fromBundle(args).getUsername();
         }
 
         setHasOptionsMenu(true);
@@ -71,7 +71,6 @@ public class LimitesConfigFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        username = LimitesConfigFragmentArgs.fromBundle(getArguments()).getUsername();
         limiteDao = FinancasDbHelper.getLimiteDao(getContext().getApplicationContext());
 
         limitadoHabilitadoSwitch = view.findViewById(R.id.limiteHabilitadoSwitch);

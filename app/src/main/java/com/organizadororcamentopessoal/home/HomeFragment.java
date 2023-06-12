@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.organizadororcamentopessoal.R;
 import com.organizadororcamentopessoal.datasource.DatabaseContract;
 import com.organizadororcamentopessoal.home.HomeFragmentDirections;
+import com.organizadororcamentopessoal.relatorios.RelatoriosFragmentDirections;
 
 public class HomeFragment extends Fragment {
     private String username;
@@ -52,6 +53,12 @@ public class HomeFragment extends Fragment {
             Navigation.findNavController(button)
                     .navigate(HomeFragmentDirections
                     .actionHomeFragmentToMovimentacaoDiaria(username));
+        });
+
+        resumoButton.setOnClickListener((View button) -> {
+            Navigation.findNavController(button)
+                    .navigate(HomeFragmentDirections
+                    .actionHomeFragmentToRelatoriosFragment(username));
         });
     }
 }
