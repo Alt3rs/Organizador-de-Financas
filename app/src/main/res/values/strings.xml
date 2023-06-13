@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">$e Organize</string>
+    <string name="app_name">Se Organiza</string>
     <string name="home_title">Home</string>
     <string name="movimentacao_diaria_fragment_title">Movimentação Diária</string>
     <string name="cadastro_activity_title">Cadastro</string>

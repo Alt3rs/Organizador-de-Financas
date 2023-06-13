@@ -20,7 +20,6 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
@@ -53,8 +52,8 @@ public class MovimentacaoDiariaFragment extends Fragment implements AdicionarMov
     private LimiteDao limiteDao;
     private Button adicionarRecebimentoButton, adicionarGastoButton;
     private TextView limiteDiarioValueTextView, totalGastoDiarioValueTextView,
-            totalRecebimentoValueTextView, saldoValueTextView;
-    private TableRow limiteTableRow;
+            totalRecebimentoValueTextView, saldoValueTextView, limiteRestanteTextView;
+    private TableRow limiteTableRow, limiteRemanscenteTableRow;
     private RecyclerView recyclerView;
     private MovimentacaoAdapter movimentacaoAdapter;
     private LinearLayoutManager layoutManager;
@@ -135,11 +134,13 @@ public class MovimentacaoDiariaFragment extends Fragment implements AdicionarMov
 
         adicionarRecebimentoButton = view.findViewById(R.id.adicionarRecebimentoButton);
         adicionarGastoButton = view.findViewById(R.id.adicionarGastoButton);
-        limiteDiarioValueTextView = view.findViewById(R.id.orcamentoValueTextView);
+        limiteDiarioValueTextView = view.findViewById(R.id.limiteValueTextView);
         totalRecebimentoValueTextView = view.findViewById(R.id.totalRecebimentoValueTextView);
         totalGastoDiarioValueTextView = view.findViewById(R.id.totalGastoValueTextView);
         saldoValueTextView = view.findViewById(R.id.saldoValueTextView);
+        limiteRestanteTextView = view.findViewById(R.id.limiteRemanescentValueTextView);
         limiteTableRow = view.findViewById(R.id.limiteTableRow);
+        limiteRemanscenteTableRow = view.findViewById(R.id.limiteRemanescenteTableRow);
         recyclerView =  view.findViewById(R.id.recyclerView);
 
         toolbar = getActivity().findViewById(R.id.main_toolbar);
@@ -173,28 +174,32 @@ public class MovimentacaoDiariaFragment extends Fragment implements AdicionarMov
                 super.onSelectionChanged();
                 int selectedItens =  tracker.getSelection().size();
                 if(selectedItens > 0) {
-                    if(itemsSelecionadosBar.getVisibility() == View.GONE) {
-                        itemsSelecionadosBar.setAlpha(0f);
-                        itemsSelecionadosBar.setVisibility(View.VISIBLE);
-                        itemsSelecionadosBar.animate().alpha(1f).setDuration(shortAnimationDuration).setListener(null);
-                        toolbar.animate().alpha(0f).setDuration(shortAnimationDuration).setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                toolbar.setVisibility(View.GONE);
-                            }
-                        });
-                    }
+//                    if(itemsSelecionadosBar.getVisibility() == View.GONE) {
+//                        itemsSelecionadosBar.setAlpha(0f);
+//                        itemsSelecionadosBar.setVisibility(View.VISIBLE);
+//                        itemsSelecionadosBar.animate().alpha(1f).setDuration(shortAnimationDuration).setListener(null);
+//                        toolbar.animate().alpha(0f).setDuration(shortAnimationDuration).setListener(new AnimatorListenerAdapter() {
+//                            @Override
+//                            public void onAnimationEnd(Animator animation) {
+//                                toolbar.setVisibility(View.GONE);
+//                            }
+//                        });
+//                    }
+                    itemsSelecionadosBar.setVisibility(View.VISIBLE);
+                    toolbar.setVisibility(View.GONE);
                     itemsSelecionadosTextView.setText(String.format(Locale.getDefault(), "%d items", selectedItens));
                 } else {
-                    toolbar.setAlpha(0f);
+//                    toolbar.setAlpha(0f);
+//                    toolbar.setVisibility(View.VISIBLE);
+//                    toolbar.animate().alpha(1f).setDuration(shortAnimationDuration).setListener(null);
+//                    itemsSelecionadosBar.animate().alpha(0f).setDuration(shortAnimationDuration).setListener(new AnimatorListenerAdapter() {
+//                                @Override
+//                                public void onAnimationEnd(Animator animation) {
+//                                    itemsSelecionadosBar.setVisibility(View.GONE);
+//                                }
+//                        });
+                    itemsSelecionadosBar.setVisibility(View.GONE);
                     toolbar.setVisibility(View.VISIBLE);
-                    toolbar.animate().alpha(1f).setDuration(shortAnimationDuration).setListener(null);
-                    itemsSelecionadosBar.animate().alpha(0f).setDuration(shortAnimationDuration).setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    itemsSelecionadosBar.setVisibility(View.GONE);
-                                }
-                        });
                 }
             }
         });
@@ -233,18 +238,26 @@ public class MovimentacaoDiariaFragment extends Fragment implements AdicionarMov
 
         if(limiteDao.limiteEstaHabilitado(username)) {
             double limite = limiteDao.listarTodosLimitesDoUsuario(username).get(0).getValor();
-            double saldo = recebimentoTotal + gastoTotal + limite;
+            double saldo = recebimentoTotal + gastoTotal;
             limiteDiarioValueTextView.setText(String.format(Locale.getDefault(), "%.2f", limite));
             saldoValueTextView.setText(String.format(Locale.getDefault(), "%.2f", saldo));
+            double limiteRestante = limite - gastoTotal;
+            limiteRestanteTextView.setText(String.format(Locale.getDefault(), "%.2f", limiteRestante));
+            if(limiteRestante > 0) {
+                limiteRestanteTextView.setTextColor(getContext().getResources().getColor(R.color.verde_recebimento, getContext().getTheme()));
+            } else if(limiteRestante < 0 ) {
+                limiteRestanteTextView.setTextColor(getContext().getResources().getColor(R.color.vermelho_gasto, getContext().getTheme()));
+            } else {
+                limiteRestanteTextView.setTextColor(getContext().getResources().getColor(R.color.black, getContext().getTheme()));
+            }
             limiteTableRow.setVisibility(View.VISIBLE);
+            limiteRemanscenteTableRow.setVisibility(View.VISIBLE);
         } else {
             double saldo = recebimentoTotal + gastoTotal;
             saldoValueTextView.setText(String.format(Locale.getDefault(), "%.2f", saldo));
             limiteTableRow.setVisibility(View.GONE);
+            limiteRemanscenteTableRow.setVisibility(View.GONE);
         }
-
-        //movimentacaoAdapter.getDataSet().clear();
-        //movimentacaoAdapter.getDataSet().addAll(obterMovimentacaoHoje());
         movimentacaoAdapter.setDataSet(obterMovimentacaoHoje());
         movimentacaoAdapter.notifyDataSetChanged();
         recyclerView.scrollToPosition(movimentacaoAdapter.getDataSet().size() -1);

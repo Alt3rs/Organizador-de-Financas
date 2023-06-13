@@ -38,7 +38,7 @@
     </fragment>
     <fragment
         android:id="@+id/limitesConfigFragment"
-        android:name="com.organizadororcamentopessoal.adicionar_movimentacao.LimitesConfigFragment"
+        android:name="com.organizadororcamentopessoal.configuracoes.LimitesConfigFragment"
         android:label="@string/limite_config_fragment_title"
         tools:layout="@layout/fragment_limites_config" >
         <argument android:name="username"

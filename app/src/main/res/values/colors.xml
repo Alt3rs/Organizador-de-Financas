@@ -5,4 +5,9 @@
     <color name="verde_recebimento">#4CAF50</color>
     <color name="vermelho_gasto">#B83B62</color>
     <color name="roxo">#673AB7</color>
+
+    <color name="verde_claro">#99FF99</color>
+    <color name="verde">#00BE08</color>
+    <color name="azul">#009CBE</color>
+    <color name="amarelo">#F8A201</color>
 </resources>
