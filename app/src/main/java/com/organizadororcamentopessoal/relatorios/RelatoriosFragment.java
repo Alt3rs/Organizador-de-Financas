@@ -1,5 +1,6 @@
 package com.organizadororcamentopessoal.relatorios;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,9 +12,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import androidx.appcompat.widget.Toolbar;
 
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.organizadororcamentopessoal.R;
@@ -82,6 +86,15 @@ public class RelatoriosFragment extends Fragment {
         usuarioDao = FinancasDbHelper.getUserDao(getContext());
         unidadeTempoSpinner = view.findViewById(R.id.visaoSpinner);
 
+        Toolbar toolbar = getActivity().findViewById(R.id.main_toolbar);
+        toolbar.setBackgroundColor(getContext().getColor(R.color.verde));
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = this.getActivity().getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(getContext().getColor(R.color.verde));
+        }
+
         String[] unidades = new String[] {"MES", "HORA", "DIA", "SEMANA", "ANO" };
         unidadeTempoSpinner.setAdapter(new ArrayAdapter<String>(this.getContext(), R.layout.spinner_item, unidades));
         unidadeTempoSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -130,8 +143,8 @@ public class RelatoriosFragment extends Fragment {
         legend.setTextSize(15f);
         legend.setForm(Legend.LegendForm.LINE);
 
-        Date inicio = new Date(LocalDate.of(1, 1, 1).toEpochDay() * 3600*24*1000);
-        Date fim = new Date(LocalDate.of(9999, 12, 31).toEpochDay() * 3600*24*1000);
+        Date inicio = new Date(LocalDate.of(1900, 1, 1).toEpochDay() * 3600*24*1000);
+        Date fim = new Date(LocalDate.of(2500, 12, 31).toEpochDay() * 3600*24*1000);
 
         List<Movimentacao> gastos = movimentacaoDao.obterMovimentacaoNoIntervaloAgrupado(username, inicio, fim, MovimentacaoDao.GASTO, unidade);
         List<Movimentacao> recebimentos = movimentacaoDao.obterMovimentacaoNoIntervaloAgrupado(username, inicio, fim, MovimentacaoDao.RECEBIMENTO, unidade);
@@ -164,8 +177,8 @@ public class RelatoriosFragment extends Fragment {
         for(Movimentacao movimentacao : movimentacoes) {
             long time = movimentacao.getDataMovimentacao().getTime();
             long localTime = movimentacao.getDataMovimentacao().getTime() + TimeZone.getDefault().getRawOffset();
-            float localDateTime = Tempo.epochMilliTo(localTime, unidade);
-            pontos.add( new Entry( localDateTime, Math.abs((float) movimentacao.getValor())) );
+            double localDateTime = Tempo.epochMilliTo((double) localTime, unidade);
+            pontos.add( new Entry( (float)localDateTime, Math.abs((float) movimentacao.getValor())) );
         }
         return pontos;
     }
@@ -211,7 +224,8 @@ class EpochToDateFormatter extends IndexAxisValueFormatter {
     }
     @Override
     public String getAxisLabel(float value, AxisBase axis) {
-        String result =dateFormat.format(Tempo.epochMilliTo((long) value, unidadeTempo));
+        float time = Tempo.toEpochMilli(value, unidadeTempo);
+        String result = dateFormat.format(time);
         return result;
     }
 }

@@ -10,4 +10,7 @@
     <color name="verde">#00BE08</color>
     <color name="azul">#009CBE</color>
     <color name="amarelo">#F8A201</color>
+    <color name="amarelo_claro">#EACB02</color>
+    <color name="verde_escurp">#53AE02</color>
+    <color name="azul_escuro">#187FD1</color>
 </resources>

@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="@color/azul"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -85,7 +85,8 @@
                 android:textStyle="bold"
                 app:cornerRadius="0dp"
                 app:icon="@drawable/vector_calendario"
-                app:iconGravity="textEnd" />
+                app:iconGravity="textEnd"
+                app:iconTint="@color/azul" />
         </LinearLayout>
 
         <LinearLayout
@@ -139,7 +140,8 @@
                 android:textStyle="bold"
                 app:cornerRadius="0dp"
                 app:icon="@drawable/baseline_schedule_24"
-                app:iconGravity="textEnd" />
+                app:iconGravity="textEnd"
+                app:iconTint="@color/azul" />
         </LinearLayout>
 
 
@@ -220,14 +222,14 @@
             android:layout_margin="5dp"
             android:backgroundTint="#00FFFFFF"
             android:text="@string/cancelar"
-            android:textColor="?attr/colorPrimary" />
+            android:textColor="@color/azul" />
 
         <Button
             android:id="@+id/salvarButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:backgroundTint="?attr/colorPrimary"
+            android:backgroundTint="@color/azul"
             android:text="@string/salvar" />
     </LinearLayout>
 

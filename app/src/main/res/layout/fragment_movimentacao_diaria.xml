@@ -42,6 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_margin="5dp"
+                android:visibility="gone"
                 app:icon="@drawable/baseline_edit_24"
                 app:iconPadding="0dp"
                 app:iconSize="36dp"
