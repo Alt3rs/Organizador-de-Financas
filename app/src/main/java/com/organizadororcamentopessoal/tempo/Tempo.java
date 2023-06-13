@@ -59,4 +59,57 @@ public class Tempo {
             throw new IllegalArgumentException();
         }
     }
+
+    public static double epochMilliTo(double epoch, int unidade) {
+        if(unidade == MovimentacaoDao.MINUTO) {
+            return epoch / MIN_IN_MILLI;
+        } else if(unidade == MovimentacaoDao.HORA) {
+            return epoch / HORA_IN_MILLI;
+        } else if(unidade == MovimentacaoDao.DIA) {
+            return epoch / DIA_IN_MILLI;
+        } else if(unidade == MovimentacaoDao.SEMANA) {
+            return epoch / SEMANA_IN_MILLI;
+        } else if(unidade == MovimentacaoDao.MES) {
+            return epoch / MES_IN_MILLI;
+        } else if(unidade == MovimentacaoDao.ANO){
+            return epoch / ANO_IN_MILLI;
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public static long toEpochMilli(long periodo, int unidade) {
+        if(unidade == MovimentacaoDao.MINUTO) {
+            return periodo * MIN_IN_MILLI;
+        } else if(unidade == MovimentacaoDao.HORA) {
+            return periodo * HORA_IN_MILLI;
+        } else if(unidade == MovimentacaoDao.DIA) {
+            return periodo * DIA_IN_MILLI;
+        } else if(unidade == MovimentacaoDao.SEMANA) {
+            return periodo * SEMANA_IN_MILLI;
+        } else if(unidade == MovimentacaoDao.MES) {
+            return periodo * MES_IN_MILLI;
+        } else if(unidade == MovimentacaoDao.ANO){
+            return periodo * ANO_IN_MILLI;
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+    public static float toEpochMilli(float periodo, int unidade) {
+        if(unidade == MovimentacaoDao.MINUTO) {
+            return periodo * MIN_IN_MILLI;
+        } else if(unidade == MovimentacaoDao.HORA) {
+            return periodo * HORA_IN_MILLI;
+        } else if(unidade == MovimentacaoDao.DIA) {
+            return periodo * DIA_IN_MILLI;
+        } else if(unidade == MovimentacaoDao.SEMANA) {
+            return periodo * SEMANA_IN_MILLI;
+        } else if(unidade == MovimentacaoDao.MES) {
+            return periodo * MES_IN_MILLI;
+        } else if(unidade == MovimentacaoDao.ANO){
+            return periodo * ANO_IN_MILLI;
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
 }

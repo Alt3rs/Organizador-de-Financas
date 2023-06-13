@@ -2,6 +2,7 @@ package com.organizadororcamentopessoal.adicionar_movimentacao;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -144,6 +147,14 @@ public class MovimentacaoDiariaFragment extends Fragment implements AdicionarMov
         recyclerView =  view.findViewById(R.id.recyclerView);
 
         toolbar = getActivity().findViewById(R.id.main_toolbar);
+        toolbar.setBackgroundColor(getContext().getColor(R.color.azul));
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = this.getActivity().getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(getContext().getColor(R.color.azul));
+        }
+
         itemsSelecionadosBar = view.findViewById(R.id.itemsSelecionadosBar);
         itemsSelecionadosTextView =  view.findViewById(R.id.itemsSelecionadosTextView);
         editarButton = view.findViewById(R.id.editarButton);

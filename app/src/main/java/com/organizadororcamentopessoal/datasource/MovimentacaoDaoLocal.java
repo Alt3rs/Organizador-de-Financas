@@ -233,7 +233,7 @@ public class MovimentacaoDaoLocal  implements MovimentacaoDao {
 //                " GROUP BY strftime(?, dataMovimentacao, 'unixepoch', 'localtime') " +
 //                " ORDER BY "+MovimentacaoTable.DATA_MOVIMENTACAO+" ASC";
             final String command = "SELECT SUM("+MovimentacaoTable.VALOR+") AS total, " +
-                    " strftime('%%s', strftime(?, "+MovimentacaoTable.DATA_MOVIMENTACAO+", 'unixepoch', 'localtime'), 'localtime') AS epoch " +
+                    " strftime('%%s', strftime(?, "+MovimentacaoTable.DATA_MOVIMENTACAO+", 'unixepoch', 'localtime'), 'utc') AS epoch " +
                     " FROM "+MovimentacaoTable.TABLE_NAME+" m"+
                     " JOIN "+UsuarioTable.TABLE_NAME+" AS u ON u."+UsuarioTable.ID_USUARIO+" = m."+MovimentacaoTable.ID_USUARIO+
                     " WHERE "+MovimentacaoTable.DATA_MOVIMENTACAO+" BETWEEN ? AND ? AND u."+UsuarioTable.USERNAME+" = ? %s"+
