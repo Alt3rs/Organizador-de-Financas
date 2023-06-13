@@ -30,6 +30,7 @@ public class FinancasDbHelper extends SQLiteOpenHelper {
         MyDB.execSQL(DatabaseContract.UsuarioTable.CREATE_TABLE);
         MyDB.execSQL(DatabaseContract.MovimentacaoTable.CREATE_TABLE);
         MyDB.execSQL(DatabaseContract.LimiteTable.CREATE_TABLE);
+        MyDB.execSQL(DatabaseContract.LimiteTable.CRIAR_LIMITE_PADRAO_TRIGGER);
     }
 
     @Override

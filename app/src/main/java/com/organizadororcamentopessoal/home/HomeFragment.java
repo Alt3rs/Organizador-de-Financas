@@ -18,10 +18,10 @@ import android.widget.TextView;
 import com.organizadororcamentopessoal.R;
 import com.organizadororcamentopessoal.datasource.DatabaseContract;
 import com.organizadororcamentopessoal.home.HomeFragmentDirections;
+import com.organizadororcamentopessoal.relatorios.RelatoriosFragmentDirections;
 
 public class HomeFragment extends Fragment {
     private String username;
-    private HomeViewModel viewModel;
     private Button resumoButton, calendarioButton, movimentacaoButton;
 
     public static HomeFragment newInstance() {
@@ -44,7 +44,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         resumoButton = view.findViewById(R.id.resumoButton);
         calendarioButton = view.findViewById(R.id.calendarioButton);
         movimentacaoButton = view.findViewById(R.id.movimentacaoButton);
@@ -54,6 +53,12 @@ public class HomeFragment extends Fragment {
             Navigation.findNavController(button)
                     .navigate(HomeFragmentDirections
                     .actionHomeFragmentToMovimentacaoDiaria(username));
+        });
+
+        resumoButton.setOnClickListener((View button) -> {
+            Navigation.findNavController(button)
+                    .navigate(HomeFragmentDirections
+                    .actionHomeFragmentToRelatoriosFragment(username));
         });
     }
 }

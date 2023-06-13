@@ -12,6 +12,10 @@
     <string name="cancelar">Cancelar</string>
 
     <string name="dialog_descricao_hint">Descrição(opcional)</string>
-
     <string name="dinheiro_placeholder">R$ 0,00</string>
+
+    <string name="limite_config_fragment_title">Configurações</string>
+
+    <string name="settings">Configurações</string>
+    <string name="relatorio_fragment_title">Relatórios</string>
 </resources>
