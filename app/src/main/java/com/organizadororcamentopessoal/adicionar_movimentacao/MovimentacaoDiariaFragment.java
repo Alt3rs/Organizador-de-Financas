@@ -2,6 +2,7 @@ package com.organizadororcamentopessoal.adicionar_movimentacao;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.DatePickerDialog;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -18,11 +19,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TableRow;
 import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
@@ -38,6 +41,7 @@ import com.organizadororcamentopessoal.tempo.Tempo;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -83,8 +87,12 @@ public class MovimentacaoDiariaFragment extends Fragment implements AdicionarMov
         return currentDate;
     }
 
+
     public void setCurrentDate(LocalDate currentDate) {
         this.currentDate = currentDate;
+        if(recyclerView != null) {
+            updateDisplay();
+        }
     }
 
     @Override
@@ -100,7 +108,11 @@ public class MovimentacaoDiariaFragment extends Fragment implements AdicionarMov
         }
 
         if (getArguments() != null) {
-            username = getArguments().getString(USERNAME);
+            username = MovimentacaoDiariaFragmentArgs.fromBundle(getArguments()).getUsername();
+            String data_atual = MovimentacaoDiariaFragmentArgs.fromBundle(getArguments()).getData();
+            if(data_atual != null) {
+                setCurrentDate(LocalDate.parse(data_atual));
+            }
         }
         setHasOptionsMenu(true);
     }
@@ -120,11 +132,31 @@ public class MovimentacaoDiariaFragment extends Fragment implements AdicionarMov
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.movimentacao_diaria_fragment_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle item selection
+        switch (item.getItemId()) {
+            case R.id.selecionar_data_item:
+                Calendar c = Calendar.getInstance();
+                DatePickerDialog dataPicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        setCurrentDate(LocalDate.of(year, month , dayOfMonth));
+                    }
+                }, getCurrentDate().getYear(), getCurrentDate().getMonthValue(), getCurrentDate().getDayOfMonth());
+                dataPicker.show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -242,8 +274,13 @@ public class MovimentacaoDiariaFragment extends Fragment implements AdicionarMov
     }
 
     private void updateDisplay() {
-        double gastoTotal = movimentacaoDao.totalGastoNoIntervalo(username, Tempo.getTodayStart(), Tempo.getTodayEnd());
-        double recebimentoTotal = movimentacaoDao.totalRecebimentoNoIntervalo(username, Tempo.getTodayStart(), Tempo.getTodayEnd());
+        totalGastoDiarioValueTextView.setText("0.00");
+        totalRecebimentoValueTextView.setText("0.00");
+        saldoValueTextView.setText("0.00");
+        limiteRestanteTextView.setText("0.00");
+
+        double gastoTotal = movimentacaoDao.totalGastoNoIntervalo(username, new Date(Tempo.localDateStartInMilli(getCurrentDate())), new Date(Tempo.localDateEndInMilli(getCurrentDate())));
+        double recebimentoTotal = movimentacaoDao.totalRecebimentoNoIntervalo(username, new Date(Tempo.localDateStartInMilli(getCurrentDate())), new Date(Tempo.localDateEndInMilli(getCurrentDate())));
         totalGastoDiarioValueTextView.setText(String.format(Locale.getDefault(), "%.2f", gastoTotal));
         totalRecebimentoValueTextView.setText(String.format(Locale.getDefault(), "%.2f", recebimentoTotal));
 
