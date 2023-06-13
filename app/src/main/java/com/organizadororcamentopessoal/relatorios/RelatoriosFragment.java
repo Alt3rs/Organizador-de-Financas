@@ -7,9 +7,13 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.organizadororcamentopessoal.R;
@@ -27,8 +31,8 @@ import com.organizadororcamentopessoal.datasource.FinancasDbHelper;
 import com.organizadororcamentopessoal.datasource.MovimentacaoDao;
 import com.organizadororcamentopessoal.datasource.UserDao;
 import com.organizadororcamentopessoal.entities.Movimentacao;
+import com.organizadororcamentopessoal.tempo.Tempo;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,22 +43,18 @@ import java.util.TimeZone;
 
 
 public class RelatoriosFragment extends Fragment {
-    private static float DIA = 3600 * 1000 * 24;
-    private static float HORA = 3600 * 1000;
-    private static float MIN = 60 * 1000;
     private String username;
     private MovimentacaoDao movimentacaoDao;
     private UserDao usuarioDao;
     private LineChart lineChart;
     private Date inicio, fim;
+    private Spinner unidadeTempoSpinner;
+    private int unidadeTempo = MovimentacaoDao.MES;
 
     public RelatoriosFragment() {   }
 
     public static RelatoriosFragment newInstance() {
         RelatoriosFragment fragment = new RelatoriosFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -80,11 +80,35 @@ public class RelatoriosFragment extends Fragment {
         lineChart = view.findViewById(R.id.lineChart);
         movimentacaoDao = FinancasDbHelper.getMovimentacaoDao(getContext());
         usuarioDao = FinancasDbHelper.getUserDao(getContext());
+        unidadeTempoSpinner = view.findViewById(R.id.visaoSpinner);
 
-        updateLineChart();
+        String[] unidades = new String[] {"MES", "HORA", "DIA", "SEMANA", "ANO" };
+        unidadeTempoSpinner.setAdapter(new ArrayAdapter<String>(this.getContext(), R.layout.spinner_item, unidades));
+        unidadeTempoSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setUnidadeTempo(getUnitCode( (String) parent.getItemAtPosition(position)));
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        updateLineChart(getUnidadeTempo());
+    }
+    private void setUnidadeTempo(int unidadeTempo) {
+        if(this.unidadeTempo != unidadeTempo) {
+            this.unidadeTempo = unidadeTempo;
+            updateLineChart(unidadeTempo);
+        }
+    }
+    private int getUnidadeTempo() {
+        if(unidadeTempo == -1) {
+            unidadeTempo = getUnitCode((String)unidadeTempoSpinner.getSelectedItem());
+        }
+        return unidadeTempo;
     }
 
-    private void updateLineChart() {
+    private void updateLineChart(int unidade) {
         lineChart.animateX(1200, Easing.EaseInSine);
         lineChart.getDescription().setEnabled(false);
         lineChart.getXAxis().setDrawGridLines(false);
@@ -105,23 +129,19 @@ public class RelatoriosFragment extends Fragment {
         legend.setHorizontalAlignment( Legend.LegendHorizontalAlignment.CENTER );
         legend.setTextSize(15f);
         legend.setForm(Legend.LegendForm.LINE);
+
         Date inicio = new Date(LocalDate.of(1, 1, 1).toEpochDay() * 3600*24*1000);
         Date fim = new Date(LocalDate.of(9999, 12, 31).toEpochDay() * 3600*24*1000);
-        int grupo = MovimentacaoDao.DIA;
-        List<Movimentacao> gastos = movimentacaoDao.obterMovimentacaoNoIntervaloAgrupado(username, inicio, fim, MovimentacaoDao.GASTO, grupo);
-        List<Movimentacao> recebimentos = movimentacaoDao.obterMovimentacaoNoIntervaloAgrupado(username, inicio, fim, MovimentacaoDao.RECEBIMENTO, grupo);
 
-        LineDataSet recebimentoDataSet = new LineDataSet(buildDaysLine(gastos, HORA), "Recebimentos");
-        LineDataSet gastoDataSet = new LineDataSet(buildDaysLine(recebimentos, HORA), "Gastos");
+        List<Movimentacao> gastos = movimentacaoDao.obterMovimentacaoNoIntervaloAgrupado(username, inicio, fim, MovimentacaoDao.GASTO, unidade);
+        List<Movimentacao> recebimentos = movimentacaoDao.obterMovimentacaoNoIntervaloAgrupado(username, inicio, fim, MovimentacaoDao.RECEBIMENTO, unidade);
+
+        LineDataSet recebimentoDataSet = new LineDataSet(buildDaysLine(gastos, unidade), "Recebimentos");
+        LineDataSet gastoDataSet = new LineDataSet(buildDaysLine(recebimentos, unidade), "Gastos");
         List<ILineDataSet> dataSets = configureDataSet(recebimentoDataSet, gastoDataSet);
 
-        //List<Movimentacao> movimentacoes = new ArrayList<>(gastos.size() + recebimentos.size());
-        //movimentacoes.addAll(gastos);
-        //movimentacoes.addAll(recebimentos);
-        //movimentacoes.sort(Comparator.comparing(Movimentacao::getDataMovimentacao));
-
         lineChart.setData(new LineData(dataSets));
-        xAxis.setValueFormatter(new LocalEpochDayFormatter());
+        xAxis.setValueFormatter(new EpochToDateFormatter(unidade));
         lineChart.invalidate();
     }
 
@@ -139,56 +159,59 @@ public class RelatoriosFragment extends Fragment {
         }
         return dataSets;
     }
-    private List<Entry> buildDaysLine(List<Movimentacao> movimentacoes, float base) {
+    private List<Entry> buildDaysLine(List<Movimentacao> movimentacoes, int unidade) {
         List<Entry> pontos = new ArrayList<>();
         for(Movimentacao movimentacao : movimentacoes) {
-            float localEpochDays = (movimentacao.getDataMovimentacao().getTime() + TimeZone.getDefault().getRawOffset()) / base;
-            pontos.add( new Entry( localEpochDays, Math.abs((float) movimentacao.getValor())) );
+            long time = movimentacao.getDataMovimentacao().getTime();
+            long localTime = movimentacao.getDataMovimentacao().getTime() + TimeZone.getDefault().getRawOffset();
+            float localDateTime = Tempo.epochMilliTo(localTime, unidade);
+            pontos.add( new Entry( localDateTime, Math.abs((float) movimentacao.getValor())) );
         }
         return pontos;
     }
 
+    private static int getUnitCode(String unit) {
+        switch (unit) {
+            case "MINUTO": return MovimentacaoDao.MINUTO;
+            case "HORA": return (MovimentacaoDao.HORA);
+            case "DIA": return (MovimentacaoDao.DIA);
+            case "SEMANA": return (MovimentacaoDao.SEMANA);
+            case "MES": return (MovimentacaoDao.MES);
+            case "ANO": return (MovimentacaoDao.ANO);
+        }
+        return -1;
+    }
 
-    private static class LocalEpochDayFormatter extends IndexAxisValueFormatter {
-        private int modo;
-        private SimpleDateFormat dateFormat;
-        public LocalEpochDayFormatter() {
+}
+class EpochToDateFormatter extends IndexAxisValueFormatter {
+    private int unidadeTempo;
+    private SimpleDateFormat dateFormat;
+    public EpochToDateFormatter(int unidadeTempo) {
+        setUnidadeTempo(unidadeTempo);
+    }
+    public void setUnidadeTempo(int unidadeTempo) {
+        Log.d(EpochToDateFormatter.class.getCanonicalName(), Integer.toString(unidadeTempo));
+        this.unidadeTempo = unidadeTempo;
+        if(unidadeTempo == MovimentacaoDao.MINUTO) {
+            dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+        } else if(unidadeTempo == MovimentacaoDao.HORA) {
+            dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+        } else if(unidadeTempo == MovimentacaoDao.DIA) {
+            //dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+            dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        } else if(unidadeTempo == MovimentacaoDao.SEMANA) {
+            dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        } else if(unidadeTempo == MovimentacaoDao.MES) {
+            dateFormat = new SimpleDateFormat("MM/yyyy", Locale.getDefault());
+        } else if(unidadeTempo == MovimentacaoDao.ANO) {
+            dateFormat = new SimpleDateFormat("yyyy", Locale.getDefault());
+        } else {
+            throw new IllegalArgumentException();
         }
-
-        public void setModo(int modo) {
-            this.modo = modo;
-            if(modo == MovimentacaoDao.MINUTO) {
-                dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm", Locale.getDefault());
-            }
-            if(modo == MovimentacaoDao.HORA) {
-                dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
-            }
-            if(modo == MovimentacaoDao.DIA) {
-                //dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
-                dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-            }
-            if(modo == MovimentacaoDao.SEMANA) {
-                dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-            }
-        }
-        public DateFormat getDateFormat() {
-            return dateFormat;
-        }
-        @Override
-        public String getAxisLabel(float value, AxisBase axis) {
-            if(modo == MovimentacaoDao.MINUTO) {
-                return getDateFormat().format(((long)value) * 60*1000);
-            }
-            if(modo == MovimentacaoDao.HORA) {
-                return getDateFormat().format(((long)value) * 3600*1000);
-            }
-            if(modo == MovimentacaoDao.DIA) {
-                return dateFormat.format(((long)value) * 3600*1000*24);
-            }
-            if(modo == MovimentacaoDao.SEMANA) {
-                return dateFormat.format(((long)value) * 3600*1000*24*7);
-            }
-            throw new IllegalStateException();
-        }
+    }
+    @Override
+    public String getAxisLabel(float value, AxisBase axis) {
+        String result =dateFormat.format(Tempo.epochMilliTo((long) value, unidadeTempo));
+        return result;
     }
 }

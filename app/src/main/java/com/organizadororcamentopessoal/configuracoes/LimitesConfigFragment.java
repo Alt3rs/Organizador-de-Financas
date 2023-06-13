@@ -1,4 +1,4 @@
-package com.organizadororcamentopessoal.adicionar_movimentacao;
+package com.organizadororcamentopessoal.configuracoes;
 
 import android.os.Bundle;
 
@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 
 import com.organizadororcamentopessoal.R;
+import com.organizadororcamentopessoal.configuracoes.LimitesConfigFragmentArgs;
 import com.organizadororcamentopessoal.datasource.DatabaseContract;
 import com.organizadororcamentopessoal.datasource.FinancasDbHelper;
 import com.organizadororcamentopessoal.datasource.LimiteDao;

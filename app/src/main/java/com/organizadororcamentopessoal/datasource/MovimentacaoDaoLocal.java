@@ -224,11 +224,6 @@ public class MovimentacaoDaoLocal  implements MovimentacaoDao {
         }
     }
 
-    public List<Movimentacao> listarMovimentacoesSomarMesmaData(String username, Date inicio, Date fim, int tipo, int unidade) {
-        final String statement = "SELECT SUM(m.valor), m.data AS data FROM Movimentacao m WHERE m.data BETWEEN ? and ? GROUP BY m.data";
-        return null;
-    }
-
     public List<Movimentacao> obterMovimentacaoNoIntervaloAgrupado(String username, Date inicio, Date fim, int tipo, int grupo){
 //        final String command = "SELECT SUM("+MovimentacaoTable.VALOR+") AS total, " +
 //                " unixepoch(strftime(?, "+MovimentacaoTable.DATA_MOVIMENTACAO+", 'unixepoch', 'localtime')) AS epoch " +
@@ -249,7 +244,7 @@ public class MovimentacaoDaoLocal  implements MovimentacaoDao {
         } else if (tipo == RECEBIMENTO) {
             filterByType = " AND "+ MovimentacaoTable.VALOR+" >= 0";
         } else if (tipo == GASTO) {
-            filterByType = " AND "+ MovimentacaoTable.VALOR+" <= 0";
+            filterByType = " AND "+ MovimentacaoTable.VALOR+" < 0";
         } else {
             throw new IllegalArgumentException();
         }
@@ -262,16 +257,16 @@ public class MovimentacaoDaoLocal  implements MovimentacaoDao {
             groupByArgs[0] = "%Y-%m-%d %H:00:00";
             groupByArgs[1] = "%Y-%m-%d %H:00:00";
         } else if(grupo == MovimentacaoDao.DIA){
-            groupByArgs[0] = "%Y-%m-%d";
+            groupByArgs[0] = "%Y-%m-%d 00:00:00";
             groupByArgs[1] = "%Y-%m-%d";
         } else if(grupo == MovimentacaoDao.SEMANA){
-            groupByArgs[0] = "%Y-%m-%d";
+            groupByArgs[0] = "%Y-%m-%d 00:00:00";
             groupByArgs[1] = "%Y-%w";
         } else if(grupo == MovimentacaoDao.MES){
-            groupByArgs[0] = "%Y-%m-01";
+            groupByArgs[0] = "%Y-%m-01 00:00:00";
             groupByArgs[1] = "%Y-%m-01";
         } else if(grupo == MovimentacaoDao.ANO){
-            groupByArgs[0] = "%Y-01-01";
+            groupByArgs[0] = "%Y-01-01 00:00:00";
             groupByArgs[1] = "%Y-01-01";
         } else {
             throw new IllegalArgumentException();
