@@ -246,6 +246,7 @@ public class MovimentacaoDiariaFragment extends Fragment implements AdicionarMov
                 }
             }
         });
+
         apagarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -289,7 +290,7 @@ public class MovimentacaoDiariaFragment extends Fragment implements AdicionarMov
             double saldo = recebimentoTotal + gastoTotal;
             limiteDiarioValueTextView.setText(String.format(Locale.getDefault(), "%.2f", limite));
             saldoValueTextView.setText(String.format(Locale.getDefault(), "%.2f", saldo));
-            double limiteRestante = limite - gastoTotal;
+            double limiteRestante = limite + gastoTotal;
             limiteRestanteTextView.setText(String.format(Locale.getDefault(), "%.2f", limiteRestante));
             if(limiteRestante > 0) {
                 limiteRestanteTextView.setTextColor(getContext().getResources().getColor(R.color.verde_recebimento, getContext().getTheme()));
